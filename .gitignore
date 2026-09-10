@@ -1,0 +1,10 @@
+.course-kit/
+*.tar.gz
+*.tar.gz.sha256.txt
+build/
+install/
+log/
+__pycache__/
+*.py[cod]
+.env
+.env.*
