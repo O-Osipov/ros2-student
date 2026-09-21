@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "practice_id": "PR02",
+  "commit": "b5f51beef40d143572a264ee7f734e969f827afb",
+  "course_kit": {
+    "version": "v1-w02",
+    "archive_sha256": "5d210c431e32418f45e2cffa9dd2028116c7a9520a36f3c7079c778cd73437a8"
+  },
+  "commands": [
+    "ros2 pkg create --build-type ament_python --license Apache-2.0 turtle_bringup --dependencies launch launch_ros turtlesim",
+    "colcon build --symlink-install --packages-select turtle_bringup",
+    "ros2 pkg prefix turtle_bringup",
+    "ros2 launch turtle_bringup sim.launch.py",
+    "ros2 node list --no-daemon --spin-time 2",
+    "ros2 interface show geometry_msgs/msg/Twist",
+    "ros2 topic type /turtle1/pose",
+    "ros2 topic echo /turtle1/pose turtlesim_msgs/msg/Pose --once",
+    "ros2 topic pub --once /turtle1/cmd_vel geometry_msgs/msg/Twist '{linear: {x: 1.0}, angular: {z: 0.5}}'",
+    "ros2 topic pub --rate 1 --wait-matching-subscriptions 0 /cmd_vel geometry_msgs/msg/Twist '{linear: {x: 1.0}, angular: {z: 0.5}}'",
+    "ros2 topic info /cmd_vel --verbose",
+    "ros2 topic info /turtle1/cmd_vel --verbose",
+    "ros2 topic pub --rate 1 --wait-matching-subscriptions 0 /turtle1/cmd_vel geometry_msgs/msg/Twist '{linear: {x: 1.0}, angular: {z: 0.5}}'",
+    "(cd src/turtle_bringup && python3 -m pytest test -q)",
+    "python3 .course-kit/pr02/v1/tools/check_practice.py PR02 --submission ."
+  ],
+  "tests": [
+    {
+      "name": "Сборка пустого пакета до добавления launch",
+      "status": "passed",
+      "evidence": "build-empty.txt"
+    },
+    {
+      "name": "Итоговая сборка, обнаружение пакета и установленный launch",
+      "status": "passed",
+      "evidence": "build.txt, package-prefix.txt"
+    },
+    {
+      "name": "Четыре проверки каркаса пройдены; copyright пропущен генератором",
+      "status": "passed",
+      "evidence": "package-tests.txt"
+    },
+    {
+      "name": "Launch запускает turtlesim и завершает его по SIGINT",
+      "status": "passed",
+      "evidence": "nodes-running.txt, nodes-stopped.txt, launch-first.txt"
+    },
+    {
+      "name": "Одна правильная команда изменяет Pose",
+      "status": "passed",
+      "evidence": "pose-before.txt, pose-working.txt"
+    },
+    {
+      "name": "Неверный топик: 1 издатель, 0 подписчиков; поза не меняется",
+      "status": "passed",
+      "evidence": "topic-broken.txt, topic-target-before-fix.txt, pose-broken.txt"
+    },
+    {
+      "name": "Исправление только имени: 1 издатель, 1 подписчик; движение восстановлено",
+      "status": "passed",
+      "evidence": "topic-fixed.txt, pose-fixed.txt"
+    },
+    {
+      "name": "После прекращения команд скорости нулевые; после остановки launch нода исчезла",
+      "status": "passed",
+      "evidence": "pose-resting.txt, nodes-final.txt"
+    },
+    {
+      "name": "Все run-шаги GitVerse workflow выполнены в чистой локальной копии и новом закреплённом контейнере",
+      "status": "passed",
+      "evidence": "ci-local.txt"
+    }
+  ],
+  "defect": {
+    "reproducer": "После остановки от одиночной команды запущен непрерывный издатель Twist в /cmd_vel. У него 1 publisher и 0 subscribers; у /turtle1/cmd_vel — 0 publishers и 1 subscriber. Координаты остались x=6.509308815002441, y=5.796990871429443.",
+    "root_cause": "Полное имя /cmd_vel отличается от подписки turtlesim /turtle1/cmd_vel. Одинаковый тип Twist и обнаружение издателя не создают подписчика у другого имени.",
+    "proof_after": "Издатель остановлен, изменено только имя на /turtle1/cmd_vel при тех же скорости, частоте и домене. Обнаружено 1 publisher/1 subscriber, x=7.248984336853027, y=6.511366367340088. После прекращения публикаций скорости снова нулевые."
+  },
+  "claims": {
+    "public_tests_passed": true,
+    "defect_reproduced": true,
+    "defect_fixed": true
+  },
+  "time": {
+    "contact_academic_hours": 0,
+    "self_study_hours": 0.15
+  },
+  "time_note": "Демонстрационный пример без контактной пары. Интервал от завершения пустой сборки до оформления отчёта; подготовка среды и последующий CI-прогон в этот замер не входят. Это не нормативная трудоёмкость студента.",
+  "ai_used": true,
+  "recorded_at_utc": "2026-09-21T03:36:55.813456+00:00",
+  "runtime_note": "Настоящий turtlesim, QT_QPA_PLATFORM=offscreen. Нет визуальной проверки окна; подтверждение по CLI/Pose.",
+  "ci_note": "Удалённый GitVerse CI ещё не выполнен: push делает владелец. Локальный прогон workflow описан в ci-local.txt."
+}
