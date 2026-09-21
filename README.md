@@ -114,6 +114,26 @@ python3 .course-kit/pr02/v1/tools/check_practice.py PR02 --submission .
 CI собирает пакет, проверяет установку launch и отчёт; GUI в CI не запускается.
 Локальные проверки не являются ссылкой на успешный run GitVerse.
 
+В закреплённом ROS-образе нет `node`. GitVerse использует его для JavaScript
+действия `actions/checkout@v4`, включая завершающий шаг `post`, который удаляет
+учётные данные. Поэтому **до checkout** workflow запускает обычный shell-шаг:
+под root устанавливает `nodejs` из Ubuntu 26.04 и проверяет версию ≥ 20.
+Локально проверена версия 22.22.1. `actions/setup-node` до bootstrap не поможет:
+это тоже JavaScript action. Node остаётся в контейнере до завершения job.
+
+На облачном раннере GitVerse
+[нет доступа к docker.sock](https://gitverse.ru/docs/cicd/docs/runners/cloud-hosted/),
+поэтому здесь ROS работает в `jobs.practice.container`, а не через `docker run`
+из шага. Для старого образа Jazzy этот способ установки Node нельзя переносить
+без проверки версии пакета Ubuntu.
+
+Первый удалённый run выявил отсутствие `node`. Прежний локальный лог
+`ci-local.txt` проверял только shell-шаги и этого не обнаружил. Проверка после
+исправления отдельно выполняет настоящий checkout main и post с локальным
+источником Git и тестовым токеном; описание и новые логи находятся в
+[evidence/pr02/ci-runtime.md](evidence/pr02/ci-runtime.md).
+Новый удалённый run ещё должен пройти после push владельцем.
+
 ## Два коммита и сдача
 
 Коммит A содержит пакет, README и workflow. Коммит B содержит только

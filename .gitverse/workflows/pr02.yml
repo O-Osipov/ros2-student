@@ -8,10 +8,21 @@ jobs:
     timeout-minutes: 15
     container:
       image: osrf/ros:lyrical-desktop-full@sha256:e6b1cb530b65588279681db53784e264ce5cf83f2cc33e689d27d6024d7f3ebe
+      options: --user 0
     env:
       COURSE_KIT_URL: https://ros.lms.ci.nsu.ru/downloads/robotics-course-kit-v1-w02-5d210c431e32.tar.gz
       COURSE_KIT_SHA256: 5d210c431e32418f45e2cffa9dd2028116c7a9520a36f3c7079c778cd73437a8
     steps:
+      # GitVerse запускает JavaScript actions через node внутри job-контейнера.
+      # ROS-образ не содержит Node; он нужен и для main, и для post checkout.
+      - name: Подготовить Node для checkout и его завершающего шага
+        shell: bash
+        run: |
+          test "$(id -u)" -eq 0
+          apt-get update
+          DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends nodejs
+          node --version
+          node -e 'if (Number(process.versions.node.split(".")[0]) < 20) process.exit(1)'
       - name: Получить всю историю коммитов
         uses: actions/checkout@v4
         with:
