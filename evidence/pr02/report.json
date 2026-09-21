@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "practice_id": "PR02",
-  "commit": "b5f51beef40d143572a264ee7f734e969f827afb",
+  "commit": "90b5f38e691b86f67f4e6eb18a6353fe802c8170",
   "course_kit": {
     "version": "v1-w02",
     "archive_sha256": "5d210c431e32418f45e2cffa9dd2028116c7a9520a36f3c7079c778cd73437a8"
@@ -68,6 +68,11 @@
       "name": "Все run-шаги GitVerse workflow выполнены в чистой локальной копии и новом закреплённом контейнере",
       "status": "passed",
       "evidence": "ci-local.txt"
+    },
+    {
+      "name": "Bootstrap Node, настоящий checkout main/post и shell-шаги проверены локально после исправления CI",
+      "status": "passed",
+      "evidence": "ci-runtime.txt, ci-runtime.md, ci-probe.py"
     }
   ],
   "defect": {
@@ -87,6 +92,6 @@
   "time_note": "Демонстрационный пример без контактной пары. Интервал от завершения пустой сборки до оформления отчёта; подготовка среды и последующий CI-прогон в этот замер не входят. Это не нормативная трудоёмкость студента.",
   "ai_used": true,
   "recorded_at_utc": "2026-09-21T03:36:55.813456+00:00",
-  "runtime_note": "Настоящий turtlesim, QT_QPA_PLATFORM=offscreen. Нет визуальной проверки окна; подтверждение по CLI/Pose.",
-  "ci_note": "Удалённый GitVerse CI ещё не выполнен: push делает владелец. Локальный прогон workflow описан в ci-local.txt."
+  "runtime_note": "Настоящий turtlesim, QT_QPA_PLATFORM=offscreen. Нет визуальной проверки окна; подтверждение по CLI/Pose. ROS-код после исходного опыта не менялся; при исправлении только CI и README повторный turtlesim-опыт не выполнялся, исходные наблюдения сохранены.",
+  "ci_note": "Первый удалённый GitVerse run выявил отсутствие node в ROS-контейнере. Исправление: shell bootstrap до checkout. Новая локальная проверка включает настоящий main/post action и очистку тестового auth header, но не заменяет удалённый run после push владельцем. Прежний ci-local.txt сохранён без изменений."
 }
