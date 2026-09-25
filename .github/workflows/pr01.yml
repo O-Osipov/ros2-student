@@ -2,6 +2,9 @@ name: PR01 — проверка отчёта
 
 on: [push, pull_request]
 
+permissions:
+  contents: read
+
 jobs:
   evidence:
     runs-on: ubuntu-latest
