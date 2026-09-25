@@ -1,0 +1,1 @@
+После Ctrl+C: ros2 node list пуст; узел /turtlesim завершён.

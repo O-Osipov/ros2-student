@@ -1,84 +1,72 @@
 {
   "schema_version": 1,
   "practice_id": "PR02",
-  "commit": "90b5f38e691b86f67f4e6eb18a6353fe802c8170",
+  "commit": "4b5aea1c9886e2234a9be7fa54ab86190eef0f67",
   "course_kit": {
-    "version": "v1-w02",
-    "archive_sha256": "5d210c431e32418f45e2cffa9dd2028116c7a9520a36f3c7079c778cd73437a8"
+    "version": "v1-w03",
+    "archive_sha256": "7fbfd3e8161ab6c6ebefc7663efdaf77d9a7d490399743507f33dcefbd5ac522"
   },
   "commands": [
     "ros2 pkg create --build-type ament_python --license Apache-2.0 turtle_bringup --dependencies launch launch_ros turtlesim",
     "colcon build --symlink-install --packages-select turtle_bringup",
+    "source install/setup.bash",
     "ros2 pkg prefix turtle_bringup",
     "ros2 launch turtle_bringup sim.launch.py",
-    "ros2 node list --no-daemon --spin-time 2",
+    "ros2 node list --no-daemon --spin-time 5",
     "ros2 interface show geometry_msgs/msg/Twist",
     "ros2 topic type /turtle1/pose",
-    "ros2 topic echo /turtle1/pose turtlesim_msgs/msg/Pose --once",
+    "ros2 topic echo /turtle1/pose --once",
     "ros2 topic pub --once /turtle1/cmd_vel geometry_msgs/msg/Twist '{linear: {x: 1.0}, angular: {z: 0.5}}'",
     "ros2 topic pub --rate 1 --wait-matching-subscriptions 0 /cmd_vel geometry_msgs/msg/Twist '{linear: {x: 1.0}, angular: {z: 0.5}}'",
     "ros2 topic info /cmd_vel --verbose",
     "ros2 topic info /turtle1/cmd_vel --verbose",
     "ros2 topic pub --rate 1 --wait-matching-subscriptions 0 /turtle1/cmd_vel geometry_msgs/msg/Twist '{linear: {x: 1.0}, angular: {z: 0.5}}'",
-    "(cd src/turtle_bringup && python3 -m pytest test -q)",
-    "python3 .course-kit/pr02/v1/tools/check_practice.py PR02 --submission ."
+    "python3 -m py_compile src/turtle_bringup/launch/sim.launch.py",
+    "python3 .course-kit/v1/tools/check_practice.py PR02 --submission .",
+    "python3 .course-kit/v1/tools/check_practice.py PR02 --submission .",
+    "set -eo pipefail; source /opt/ros/lyrical/setup.bash; colcon build --symlink-install --packages-select turtle_bringup; source install/setup.bash; test -f \"$(ros2 pkg prefix turtle_bringup)/share/turtle_bringup/launch/sim.launch.py\"; python3 -m py_compile src/turtle_bringup/launch/sim.launch.py"
   ],
   "tests": [
     {
-      "name": "Сборка пустого пакета до добавления launch",
+      "name": "Пустой пакет turtle_bringup собран",
       "status": "passed",
       "evidence": "build-empty.txt"
     },
     {
-      "name": "Итоговая сборка, обнаружение пакета и установленный launch",
+      "name": "После установки launch пакет пересобран и sim.launch.py найден в install",
       "status": "passed",
-      "evidence": "build.txt, package-prefix.txt"
+      "evidence": "build.txt, commands.md"
     },
     {
-      "name": "Четыре проверки каркаса пройдены; copyright пропущен генератором",
+      "name": "ros2 launch запускает /turtlesim и Ctrl+C завершает её",
       "status": "passed",
-      "evidence": "package-tests.txt"
+      "evidence": "nodes-running.txt, nodes-stopped.txt, launch-experiment.txt, nodes-final.txt"
     },
     {
-      "name": "Launch запускает turtlesim и завершает его по SIGINT",
+      "name": "Однократный Twist вызвал движение и поворот",
       "status": "passed",
-      "evidence": "nodes-running.txt, nodes-stopped.txt, launch-first.txt"
+      "evidence": "pose-before.txt, publish-once.txt, pose-working.txt"
     },
     {
-      "name": "Одна правильная команда изменяет Pose",
+      "name": "В /cmd_vel издатель без подписчика, поза не меняется",
       "status": "passed",
-      "evidence": "pose-before.txt, pose-working.txt"
+      "evidence": "topic-broken.txt, topic-target-broken.txt, pose-broken.txt"
     },
     {
-      "name": "Неверный топик: 1 издатель, 0 подписчиков; поза не меняется",
+      "name": "При исправлении имени подписчик обнаружен и поза изменилась",
       "status": "passed",
-      "evidence": "topic-broken.txt, topic-target-before-fix.txt, pose-broken.txt"
+      "evidence": "topic-fixed.txt, pose-fixed.txt, pose-resting.txt"
     },
     {
-      "name": "Исправление только имени: 1 издатель, 1 подписчик; движение восстановлено",
+      "name": "После исправления workflow сборка и установка launch прошли в чистом ROS-контейнере",
       "status": "passed",
-      "evidence": "topic-fixed.txt, pose-fixed.txt"
-    },
-    {
-      "name": "После прекращения команд скорости нулевые; после остановки launch нода исчезла",
-      "status": "passed",
-      "evidence": "pose-resting.txt, nodes-final.txt"
-    },
-    {
-      "name": "Все run-шаги GitVerse workflow выполнены в чистой локальной копии и новом закреплённом контейнере",
-      "status": "passed",
-      "evidence": "ci-local.txt"
-    },
-    {
-      "name": "Bootstrap Node, настоящий checkout main/post и shell-шаги проверены локально после исправления CI",
-      "status": "passed",
-      "evidence": "ci-runtime.txt, ci-runtime.md, ci-probe.py"
+      "evidence": "ci-github.md"
     }
   ],
   "defect": {
-    "reproducer": "После остановки от одиночной команды запущен непрерывный издатель Twist в /cmd_vel. У него 1 publisher и 0 subscribers; у /turtle1/cmd_vel — 0 publishers и 1 subscriber. Координаты остались x=6.509308815002441, y=5.796990871429443.",
-    "root_cause": "Полное имя /cmd_vel отличается от подписки turtlesim /turtle1/cmd_vel. Одинаковый тип Twist и обнаружение издателя не создают подписчика у другого имени.",
-    "proof_after": "Издатель остановлен, изменено только имя на /turtle1/cmd_vel при тех же скорости, частоте и домене. Обнаружено 1 publisher/1 subscriber, x=7.248984336853027, y=6.511366367340088. После прекращения публикаций скорости снова нулевые."
+    "reproducer": "При работающем turtlesim опубликовать Twist linear.x=1.0, angular.z=0.5 в /cmd_vel с --rate 1 --wait-matching-subscriptions 0. ros2 topic info /cmd_vel --verbose показывает 1 издателя и 0 подписчиков; поза x остаётся 6.509308815002441.",
+    "root_cause": "Издатель и turtlesim используют разные полные имена топика: /cmd_vel и /turtle1/cmd_vel. Совпадение типа geometry_msgs/msg/Twist без совпадения имени не связывает конечные точки.",
+    "proof_after": "После замены только имени на /turtle1/cmd_vel видны 1 издатель и 1 подписчик turtlesim; x выросла с 6.509308815002441 до 7.370705604553223, скорости в сообщении Pose стали 1.0 и 0.5."
   },
   "claims": {
     "public_tests_passed": true,
@@ -87,11 +75,9 @@
   },
   "time": {
     "contact_academic_hours": 0,
-    "self_study_hours": 0.15
+    "self_study_hours": 0.5
   },
-  "time_note": "Демонстрационный пример без контактной пары. Интервал от завершения пустой сборки до оформления отчёта; подготовка среды и последующий CI-прогон в этот замер не входят. Это не нормативная трудоёмкость студента.",
+  "time_note": "Живой опыт ПР02 выполнен 25 сентября 2026 года на той же версии исходников и закреплённом ROS-образе; перенос на исходную ветку GitVerse и чистая пересборка выполнены без повторного управления turtlesim. Контактного занятия не было; время ориентировочное.",
   "ai_used": true,
-  "recorded_at_utc": "2026-09-21T03:36:55.813456+00:00",
-  "runtime_note": "Настоящий turtlesim, QT_QPA_PLATFORM=offscreen. Нет визуальной проверки окна; подтверждение по CLI/Pose. ROS-код после исходного опыта не менялся; при исправлении только CI и README повторный turtlesim-опыт не выполнялся, исходные наблюдения сохранены.",
-  "ci_note": "Первый удалённый GitVerse run выявил отсутствие node в ROS-контейнере. Исправление: shell bootstrap до checkout. Новая локальная проверка включает настоящий main/post action и очистку тестового auth header, но не заменяет удалённый run после push владельцем. Прежний ci-local.txt сохранён без изменений."
+  "recorded_at_utc": "2026-09-25T09:07:58+00:00"
 }

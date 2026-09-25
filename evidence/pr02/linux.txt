@@ -1,20 +1,32 @@
-/work
+== workspace ==
+/home/user/work/ros2-pr01
+
+== top-level, including hidden names ==
 .
 ..
 .course-kit
 .git
+.github
 .gitignore
 .gitverse
 AI_USAGE.md
-PR01.md
 README.md
 build
-course-kit.tar.gz
 evidence
 install
 log
 src
-lyrical
-46
-/opt/ros/lyrical
-Finished <<< turtle_bringup [1.10s]
+
+== package files ==
+LICENSE
+launch
+package.xml
+resource
+setup.cfg
+setup.py
+test
+turtle_bringup
+
+== src and evidence directories ==
+drwxr-xr-x 2 user user 4096 Sep 25 13:59 evidence/pr02
+drwxr-xr-x 3 user user 4096 Sep 25 13:51 src

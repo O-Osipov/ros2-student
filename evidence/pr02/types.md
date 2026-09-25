@@ -1,24 +1,12 @@
-# Типы сообщений
+# ПР02. Типы топиков и поля сообщений
 
-| Топик | Тип в использованной Lyrical | Назначение |
+Типы проверены в ROS 2 Lyrical командами `ros2 interface show geometry_msgs/msg/Twist` и `ros2 topic type /turtle1/pose`. [Сырой интерфейс Twist](twist-interface.txt) · [тип позы](pose-type.txt).
+
+| Полное имя топика | Тип | Назначение |
 |---|---|---|
-| `/turtle1/cmd_vel` | `geometry_msgs/msg/Twist` | Команда движения; turtlesim подписывается |
-| `/turtle1/pose` | `turtlesim_msgs/msg/Pose` | Текущее положение и скорости; turtlesim публикует |
-| `/cmd_vel` | `geometry_msgs/msg/Twist` | Ошибочное имя в опыте; подписчика turtlesim нет |
+| `/turtle1/cmd_vel` | `geometry_msgs/msg/Twist` | Команда линейной и угловой скорости для turtlesim |
+| `/turtle1/pose` | `turtlesim_msgs/msg/Pose` | Текущие x, y, угол и скорости черепахи |
 
-Источники: `ros2 topic type /turtle1/pose` ([pose-type.txt](pose-type.txt)),
-`ros2 topic info ... --verbose` ([topic-fixed.txt](topic-fixed.txt)),
-`ros2 interface show geometry_msgs/msg/Twist` ([twist-interface.txt](twist-interface.txt)).
-В Jazzy интерфейс позы называется `turtlesim/msg/Pose`.
+`Twist.linear` и `Twist.angular` — два `geometry_msgs/msg/Vector3` с полями `x`, `y`, `z` типа `float64`. В выполненном опыте `linear.x=1.0` задавала движение вперёд, `angular.z=0.5` — поворот против часовой стрелки; остальные компоненты оставались нулевыми. Поза в Lyrical содержит `x`, `y`, `theta`, `linear_velocity` и `angular_velocity`; имя её типа взято из команды, а не перенесено из Jazzy.
 
-`Twist` содержит два вектора: `linear` — линейная скорость, `angular` — угловая;
-у каждого есть поля x/y/z. Для плоского turtlesim используем `linear.x`
-(вперёд, условные единицы длины за секунду) и `angular.z` (рад/с, положительное
-значение — против часовой стрелки). Остальные компоненты оставлены нулевыми.
-В общем физическом ROS-интерфейсе линейная скорость задаётся в м/с.
-`Twist` не содержит timestamp/frame_id и не задаёт целевую позицию.
-
-`Pose`: x/y — координаты на плоскости симулятора, theta — угол в радианах,
-linear_velocity/angular_velocity — текущие линейная и угловая скорости.
-Изменение x/y/theta доказывает движение; нулевые скорости после прекращения
-публикаций подтверждают остановку. Одной видимости топика для этого недостаточно.
+Неверный `/cmd_vel` имел тот же тип `Twist`, но turtlesim подписывался на `/turtle1/cmd_vel`. [Данные об ошибочном топике](topic-broken.txt) и [исправленном](topic-fixed.txt) показывают разницу в числе подписчиков.
