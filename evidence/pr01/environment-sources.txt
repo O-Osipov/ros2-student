@@ -1,3 +1,4 @@
+$ cat /etc/os-release
 PRETTY_NAME="Ubuntu 26.04 LTS"
 NAME="Ubuntu"
 VERSION_ID="26.04"
@@ -11,9 +12,23 @@ BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
 PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
 UBUNTU_CODENAME=resolute
 LOGO=ubuntu-logo
+
+$ uname -m
 x86_64
-ROS_DISTRO=lyrical
-ROS_DOMAIN_ID=16
+
+$ ROS_DISTRO
+lyrical
+
+$ ROS_DOMAIN_ID
+16
+
+$ gz sim --versions
 10.4.0
+
+$ RMW
 rmw_fastrtps_cpp
-2026-09-10T04:41:01Z
+
+$ docker image inspect RepoDigests
+osrf/ros@sha256:e6b1cb530b65588279681db53784e264ce5cf83f2cc33e689d27d6024d7f3ebe
+
+WSL_DISTRO_NAME=Ubuntu-24.04

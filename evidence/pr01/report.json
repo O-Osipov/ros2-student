@@ -1,16 +1,16 @@
 {
   "schema_version": 1,
   "practice_id": "PR01",
-  "commit": "c295bde5d14f748e2a281d2c1dc0d09d89e6b4a3",
+  "commit": "fe46097d793f95cd774f67bc606f484a75510d3d",
   "course_kit": {
-    "version": "v1-w01",
-    "archive_sha256": "57866a9c98fa3abdec27b35a180697ee680bfb0f05cc015970ce306d6d849fea"
+    "version": "v1-w03",
+    "archive_sha256": "7fbfd3e8161ab6c6ebefc7663efdaf77d9a7d490399743507f33dcefbd5ac522"
   },
   "commands": [
     "ros2 run turtlesim turtlesim_node",
     "ros2 run turtlesim turtle_teleop_key",
     "ros2 doctor --report",
-    "ros2 node list --no-daemon --spin-time 2",
+    "ros2 node list --no-daemon --spin-time 5",
     "ros2 topic list -t",
     "ros2 node info /turtlesim",
     "ros2 node info /teleop_turtle",
@@ -19,56 +19,55 @@
     "timeout --signal=INT 15s ros2 topic hz /turtle1/pose",
     "ROS_DOMAIN_ID=17 timeout 5s ros2 topic echo /turtle1/pose turtlesim_msgs/msg/Pose --once",
     "ROS_DOMAIN_ID=16 timeout 5s ros2 topic echo /turtle1/pose turtlesim_msgs/msg/Pose --once",
-    "ROS_DOMAIN_ID=16 ros2 topic echo /turtle1/pose --once",
     "python3 -m json.tool evidence/pr01/environment.json",
     "python3 .course-kit/v1/tools/check_practice.py PR01 --submission ."
   ],
   "tests": [
     {
-      "name": "В рабочем домене обнаружены /teleop_turtle и /turtlesim",
+      "name": "В домене 16 обнаружены /teleop_turtle и /turtlesim",
       "status": "passed",
       "evidence": "nodes-before.txt"
     },
     {
-      "name": "Тип позы определён; получено сообщение Pose",
+      "name": "Поза получена, тип turtlesim_msgs/msg/Pose подтверждён",
       "status": "passed",
-      "evidence": "pose-type.txt, pose-before.txt"
+      "evidence": "pose-before.txt, pose-type.txt"
     },
     {
-      "name": "Частота позы измерена более 10 секунд: 62.497 Гц",
+      "name": "Частота позы измерена за 15,83 с: показание ros2 topic hz 63.284 Гц",
       "status": "passed",
-      "evidence": "pose-hz.txt, pose-hz-duration.txt"
+      "evidence": "pose-hz.txt, pose-hz-duration.txt, pose-hz-exit.txt"
     },
     {
-      "name": "Клавиша ↑ в домене 16 изменила x с 5.544445 до 7.560444",
+      "name": "↑ в домене 16 увеличила x с 5.544445 до 7.560444",
       "status": "passed",
       "evidence": "pose-before.txt, pose-after-key-working.txt"
     },
     {
-      "name": "В домене 17 виден только teleop; чтение позы завершилось таймаутом 124",
+      "name": "В домене 17 видна только teleop; echo позы завершилось таймаутом 124 без сообщения",
       "status": "passed",
       "evidence": "nodes-broken.txt, pose-broken.txt, pose-broken-exit.txt"
     },
     {
-      "name": "Клавиша ↑ из домена 17 не изменила позу симулятора",
+      "name": "↑ в домене 17 не изменила позу симулятора",
       "status": "passed",
       "evidence": "pose-after-key-broken-control.txt"
     },
     {
-      "name": "Возврат в домен 16 восстановил получение позы: exit=0",
+      "name": "В домене 16 восстановлено чтение позы, код 0",
       "status": "passed",
       "evidence": "nodes-fixed.txt, pose-fixed.txt, pose-fixed-exit.txt"
     },
     {
-      "name": "После восстановления ↑ изменила x с 7.560444 до 9.576445",
+      "name": "После восстановления ↑ увеличила x с 7.560444 до 9.576445",
       "status": "passed",
       "evidence": "pose-after-key-fixed.txt"
     }
   ],
   "defect": {
-    "reproducer": "Симулятор оставлен в ROS_DOMAIN_ID=16; teleop остановлен и запущен заново в домене 17. CLI-подписчик позы запущен в 17 с явным типом turtlesim_msgs/msg/Pose и таймаутом 5 секунд. Поза не получена, exit=124; управление ↑ не изменяет координаты.",
-    "root_cause": "Участники из разных ROS_DOMAIN_ID не обнаруживают друг друга в этой конфигурации. Переменная окружения применяется при запуске процесса: export не перенастраивает работающую ноду.",
-    "proof_after": "Teleop перезапущен в домене 16, CLI возвращён в 16. Тот же timeout 5s ros2 topic echo с тем же типом получил Pose и завершился с exit=0. Новое ↑ увеличило x до 9.576444625854492. Сравнение и первичные логи — в graph.md."
+    "reproducer": "Симулятор оставлен в ROS_DOMAIN_ID=16, teleop перезапущена в 17. Наблюдатель в 17 видит только teleop; чтение /turtle1/pose с явным типом за 5 секунд не получает Pose (exit=124). ↑ не меняет позу симулятора.",
+    "root_cause": "Участники ROS с разными ROS_DOMAIN_ID не обнаруживают друг друга в этой конфигурации. Значение переменной окружения задаётся процессу при запуске.",
+    "proof_after": "Teleop перезапущена в домене 16 и наблюдатель возвращён в 16. Та же команда echo получила Pose (exit=0); после ↑ x выросла до 9.576444625854492. Первичные логи и сравнение в graph.md."
   },
   "claims": {
     "public_tests_passed": true,
@@ -77,9 +76,9 @@
   },
   "time": {
     "contact_academic_hours": 0,
-    "self_study_hours": 0.17
+    "self_study_hours": 0.4
   },
-  "time_note": "Демонстрационный прогон без контактной пары. Учтён интервал от запуска turtlesim до заполнения отчёта; это не замер нормативной трудоёмкости студенческой ПР.",
+  "time_note": "Автоматизированный локальный опыт и оформление evidence 25 сентября 2026 года, около 24 минут. Контактного занятия не было; это не оценка личной трудоёмкости студента.",
   "ai_used": true,
-  "recorded_at_utc": "2026-09-10T04:46:44+00:00"
+  "recorded_at_utc": "2026-09-25T06:23:41+00:00"
 }

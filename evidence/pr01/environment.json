@@ -1,5 +1,6 @@
 {
   "run_mode": "docker",
+  "host": "WSL2 Ubuntu 24.04 with WSLg",
   "os": "Ubuntu 26.04 LTS",
   "architecture": "x86_64",
   "ros_distro": "lyrical",
@@ -14,7 +15,7 @@
     "broken": 17
   },
   "docker_image_digest": "osrf/ros:lyrical-desktop-full@sha256:e6b1cb530b65588279681db53784e264ce5cf83f2cc33e689d27d6024d7f3ebe",
-  "network": "bridge; все ноды и CLI внутри одного контейнера",
-  "gui": "X11, окно turtlesim на Linux-хосте",
-  "recorded_at_utc": "2026-09-10T04:41:01Z"
+  "network": "Docker bridge; all ROS nodes and CLI in the same container",
+  "gui": "WSLg X11 socket, DISPLAY=:0",
+  "recorded_at_utc": "2026-09-25T06:23:41+00:00"
 }
