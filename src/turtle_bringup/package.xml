@@ -3,8 +3,8 @@
 <package format="3">
   <name>turtle_bringup</name>
   <version>0.0.0</version>
-  <description>Launch turtlesim for practice PR02</description>
-  <maintainer email="student@example.com">Course demonstration</maintainer>
+  <description>Launch the installed turtlesim simulator for ROS 2 practice PR02</description>
+  <maintainer email="213808971+O-Osipov@users.noreply.github.com">O-Osipov</maintainer>
   <license>Apache-2.0</license>
 
   <depend>launch</depend>

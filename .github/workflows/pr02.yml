@@ -4,6 +4,9 @@ on:
   push:
     branches: [pr02]
 
+permissions:
+  contents: read
+
 jobs:
   practice:
     runs-on: ubuntu-latest

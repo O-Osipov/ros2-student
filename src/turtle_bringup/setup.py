@@ -17,9 +17,9 @@ setup(
     package_data={'': ['py.typed']},
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='Course demonstration',
-    maintainer_email='student@example.com',
-    description='Launch turtlesim for practice PR02',
+    maintainer='O-Osipov',
+    maintainer_email='213808971+O-Osipov@users.noreply.github.com',
+    description='Launch the installed turtlesim simulator for ROS 2 practice PR02',
     license='Apache-2.0',
     extras_require={
         'test': [
