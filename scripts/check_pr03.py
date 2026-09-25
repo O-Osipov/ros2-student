@@ -55,7 +55,7 @@ def stop(child):
 
 
 def cli(*args):
-    command = ['ros2', *args]
+    command = ['ros2', *args, '--no-daemon', '--spin-time', '2']
     print('$', ' '.join(command), flush=True)
     result = subprocess.run(command, text=True, capture_output=True, timeout=20)
     print(result.stdout + result.stderr, flush=True)
@@ -106,7 +106,9 @@ def main():
             cli('node', 'info', '/patrol')
             broken_info = cli('topic', 'info', '/cmd_vel', '--verbose')
             assert 'Publisher count: 1' in broken_info and 'Subscription count: 0' in broken_info
-            cli('topic', 'info', '/turtle1/cmd_vel', '--verbose')
+            observer.wait(lambda: observer.count_subscribers('/turtle1/cmd_vel') == 1)
+            target_info = cli('topic', 'info', '/turtle1/cmd_vel', '--verbose')
+            assert 'Publisher count: 0' in target_info and 'Subscription count: 1' in target_info
             observer.spin_for(2)
             broken = observer.coordinates()
             assert all(abs(a-b) < 1e-5 for a, b in zip(before, broken))
@@ -115,7 +117,8 @@ def main():
 
             patrol = launch('run', 'patrol', 'patrol', '--ros-args', '-r', 'cmd_vel:=/turtle1/cmd_vel')
             observer.wait(lambda: observer.count_publishers('/turtle1/cmd_vel') == 1)
-            cli('topic', 'info', '/turtle1/cmd_vel', '--verbose')
+            fixed_info = cli('topic', 'info', '/turtle1/cmd_vel', '--verbose')
+            assert 'Publisher count: 1' in fixed_info and 'Subscription count: 1' in fixed_info
             command_sub = observer.create_subscription(Twist, '/turtle1/cmd_vel', observer.receive_command, 10)
             observer.spin_for(1)
             observer.samples.clear()
