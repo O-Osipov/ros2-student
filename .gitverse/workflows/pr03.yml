@@ -39,7 +39,7 @@ jobs:
           test -f "$(ros2 pkg prefix turtle_bringup)/share/turtle_bringup/launch/sim.launch.py"
           python3 -m py_compile src/turtle_bringup/launch/sim.launch.py
           (cd src/turtle_bringup && python3 -m pytest test -q)
-          python3 -m pytest -q src/patrol/test
+          python3 -m pytest -q src/patrol/test scripts/test_check_pr03.py
           python3 scripts/check_pr03.py
       - name: Скачать зафиксированный комплект курса
         shell: bash

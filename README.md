@@ -24,7 +24,7 @@ export ROS_DOMAIN_ID=47
 export ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST
 colcon build --symlink-install --packages-select turtle_bringup patrol
 source install/setup.bash
-python3 -m pytest -q src/patrol/test
+python3 -m pytest -q src/patrol/test scripts/test_check_pr03.py
 ```
 
 В терминале A: `ros2 launch turtle_bringup sim.launch.py`.
@@ -60,6 +60,10 @@ QT_QPA_PLATFORM=offscreen python3 scripts/check_pr03.py
 разрыв имени, исправление только remap, частоту за 10 секунд, движение и
 завершение по SIGINT. Наблюдатель временно подписывается на правильный cmd_vel,
 поэтому во время измерения подписчиков больше, чем при ручном опыте.
+Каждый диагностический CLI-запрос ждёт нужный тип и количество endpoints
+не более 20 секунд: новый участник DDS может ещё не видеть работающие ноды.
+Повторяются только отсутствие объекта и неполный граф; остальные ошибки CLI
+сразу прерывают проверку. В логе видны номер попытки, код возврата и оба потока.
 Никакие файлы в evidence скрипт сам не переписывает: результат выводится в stdout.
 
 Чистые тесты и ROS-тесты запускаются явным pytest, чтобы успешный `colcon test`

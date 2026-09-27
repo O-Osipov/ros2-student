@@ -54,13 +54,45 @@ def stop(child):
             raise AssertionError('SIGINT did not stop process')
 
 
-def cli(*args):
+def cli(*args, expected_lines=(), seconds=20):
+    # Each --no-daemon invocation has its own DDS graph. A populated Observer
+    # graph does not imply that a new CLI participant has discovered it yet.
     command = ['ros2', *args, '--no-daemon', '--spin-time', '2']
-    print('$', ' '.join(command), flush=True)
-    result = subprocess.run(command, text=True, capture_output=True, timeout=20)
-    print(result.stdout + result.stderr, flush=True)
-    assert result.returncode == 0
-    return result.stdout
+    deadline = time.monotonic() + seconds
+    last = 'no completed query'
+    attempt = 0
+    while time.monotonic() < deadline:
+        attempt += 1
+        # Give later fresh participants more discovery time (2, 4, then 8 s);
+        # the shared deadline still limits the entire operation to seconds.
+        command[-1] = str(2 ** min(attempt, 3))
+        print('$', ' '.join(command), f'(attempt {attempt})', flush=True)
+        try:
+            result = subprocess.run(command, text=True, capture_output=True,
+                                    timeout=max(0.001, deadline - time.monotonic()))
+        except subprocess.TimeoutExpired as error:
+            raise AssertionError(
+                f'{command}: discovery deadline {seconds}s; last: {last}; '
+                f'timed-out stdout={error.stdout!r}, stderr={error.stderr!r}') from error
+        last = (f'exit={result.returncode}, stdout={result.stdout!r}, '
+                f'stderr={result.stderr!r}')
+        print(last, flush=True)
+        lines = {line.strip() for line in result.stdout.splitlines()}
+        if result.returncode == 0 and set(expected_lines) <= lines:
+            return result.stdout
+        # Retry only known discovery misses (type silently exits 1 in Lyrical)
+        # or successful but incomplete graph snapshots. Syntax/runtime errors
+        # must fail immediately, rather than being concealed by retries.
+        output = (result.stdout + result.stderr).strip()
+        missing = result.returncode == 1 and (
+            (args[:2] == ('topic', 'type') and not output)
+            or (args[:2] == ('topic', 'info') and output == f"Unknown topic '{args[2]}'")
+            or (args[:2] == ('node', 'info') and output == f"Unable to find node '{args[2]}'")
+        )
+        if result.returncode != 0 and not missing:
+            raise AssertionError(f'{command}: {last}')
+        print(f'Waiting for discovery; expected lines: {expected_lines!r}', flush=True)
+    raise AssertionError(f'{command}: discovery deadline {seconds}s; last: {last}')
 
 
 def main():
@@ -98,17 +130,19 @@ def main():
 
             simulator = launch('launch', 'turtle_bringup', 'sim.launch.py')
             observer.wait(lambda: observer.pose is not None)
-            cli('topic', 'type', '/turtle1/pose')
+            pose_type = f"{Pose.__module__.split('.')[0]}/msg/Pose"
+            cli('topic', 'type', '/turtle1/pose', expected_lines=(pose_type,))
             before = observer.coordinates()
             patrol = launch('run', 'patrol', 'patrol')
             observer.wait(lambda: observer.count_publishers('/cmd_vel') == 1)
             observer.wait(lambda: observer.count_subscribers('/turtle1/pose') >= 2)
-            cli('node', 'info', '/patrol')
-            broken_info = cli('topic', 'info', '/cmd_vel', '--verbose')
-            assert 'Publisher count: 1' in broken_info and 'Subscription count: 0' in broken_info
+            cli('node', 'info', '/patrol', expected_lines=(
+                f'/turtle1/pose: {pose_type}', '/cmd_vel: geometry_msgs/msg/Twist'))
+            cli('topic', 'info', '/cmd_vel', '--verbose', expected_lines=(
+                'Publisher count: 1', 'Subscription count: 0'))
             observer.wait(lambda: observer.count_subscribers('/turtle1/cmd_vel') == 1)
-            target_info = cli('topic', 'info', '/turtle1/cmd_vel', '--verbose')
-            assert 'Publisher count: 0' in target_info and 'Subscription count: 1' in target_info
+            cli('topic', 'info', '/turtle1/cmd_vel', '--verbose', expected_lines=(
+                'Publisher count: 0', 'Subscription count: 1'))
             observer.spin_for(2)
             broken = observer.coordinates()
             assert all(abs(a-b) < 1e-5 for a, b in zip(before, broken))
@@ -117,8 +151,8 @@ def main():
 
             patrol = launch('run', 'patrol', 'patrol', '--ros-args', '-r', 'cmd_vel:=/turtle1/cmd_vel')
             observer.wait(lambda: observer.count_publishers('/turtle1/cmd_vel') == 1)
-            fixed_info = cli('topic', 'info', '/turtle1/cmd_vel', '--verbose')
-            assert 'Publisher count: 1' in fixed_info and 'Subscription count: 1' in fixed_info
+            cli('topic', 'info', '/turtle1/cmd_vel', '--verbose', expected_lines=(
+                'Publisher count: 1', 'Subscription count: 1'))
             command_sub = observer.create_subscription(Twist, '/turtle1/cmd_vel', observer.receive_command, 10)
             observer.spin_for(1)
             observer.samples.clear()
