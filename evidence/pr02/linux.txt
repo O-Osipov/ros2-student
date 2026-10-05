@@ -1,0 +1,20 @@
+/work
+.
+..
+.course-kit
+.git
+.gitignore
+.gitverse
+AI_USAGE.md
+PR01.md
+README.md
+build
+course-kit.tar.gz
+evidence
+install
+log
+src
+lyrical
+46
+/opt/ros/lyrical
+Finished <<< turtle_bringup [1.10s]

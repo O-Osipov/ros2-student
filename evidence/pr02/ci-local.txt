@@ -1,0 +1,16 @@
+
+### Собрать пакет и проверить установленный launch
+Starting >>> turtle_bringup
+Finished <<< turtle_bringup [1.11s]
+
+Summary: 1 package finished [1.19s]
+s....                                                                    [100%]
+4 passed, 1 skipped in 5.18s
+
+### Скачать зафиксированный комплект курса
+course-kit.tar.gz: OK
+
+### Проверить версию архива и контракт evidence
+PR02: контракт evidence выполнен
+
+PASS: all local workflow run steps. Remote GitVerse run pending owner push.
