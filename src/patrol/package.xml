@@ -3,7 +3,7 @@
   <name>patrol</name>
   <version>0.1.0</version>
   <description>PR03: Pose subscription, timer and cmd_vel remapping</description>
-  <maintainer email="noreply@example.invalid">ROS course example</maintainer>
+  <maintainer email="213808971+O-Osipov@users.noreply.github.com">O-Osipov</maintainer>
   <license>Apache-2.0</license>
   <buildtool_depend>ament_python</buildtool_depend>
   <exec_depend>rclpy</exec_depend>
