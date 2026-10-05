@@ -1,51 +1,41 @@
 {
   "schema_version": 1,
   "practice_id": "PR03",
-  "commit": "35267db1da28a7da1032b5115ca2f740f142a744",
+  "commit": "9b29ca1f887abd523646468ca3554465b3ec4e42",
+  "commit_note": "Локальный коммит реализации ПР03: метаданные пакета, README и GitHub Actions. Исходная логика patrol уже присутствовала в ветке GitVerse.",
   "course_kit": {
     "version": "v1-w03",
     "archive_sha256": "7fbfd3e8161ab6c6ebefc7663efdaf77d9a7d490399743507f33dcefbd5ac522"
   },
   "commands": [
     "colcon build --symlink-install --packages-select turtle_bringup patrol",
-    "source install/setup.bash",
     "python3 -m pytest -q src/patrol/test scripts/test_check_pr03.py",
-    "QT_QPA_PLATFORM=offscreen python3 scripts/check_pr03.py",
     "ros2 run patrol patrol",
     "ros2 run patrol patrol --ros-args -r cmd_vel:=/turtle1/cmd_vel",
-    "ros2 topic hz /turtle1/cmd_vel"
+    "ros2 topic hz /turtle1/cmd_vel",
+    "python3 scripts/check_pr03.py"
   ],
   "tests": [
     {
-      "name": "4 tests: pure command selection and real ROS callbacks/timer",
+      "name": "patrol and CLI diagnostic tests",
       "status": "passed",
-      "evidence": "tests.txt"
+      "evidence": "evidence/pr03/tests.txt: 9 passed"
     },
     {
-      "name": "turtle_bringup regression: 4 passed, 1 generated copyright skip",
+      "name": "turtle_bringup regression",
       "status": "passed",
-      "evidence": "tests.txt"
+      "evidence": "evidence/pr03/tests.txt: 4 passed, 1 skipped"
     },
     {
-      "name": "Real turtlesim: zero before Pose, wrong name, remap, 10-second frequency, motion and SIGINT/watchdog",
+      "name": "Live turtlesim: zero command, wrong topic, remap, 10-second frequency, motion, watchdog",
       "status": "passed",
-      "evidence": "tests.txt, demo.md"
-    },
-    {
-      "name": "All workflow run steps in a fresh pinned container and clean local Git clone",
-      "status": "passed",
-      "evidence": "tests.txt"
-    },
-    {
-      "name": "5 CI regressions: delayed real ROS discovery, partial graph, syntax/runtime errors and missing-topic deadline",
-      "status": "passed",
-      "evidence": "tests.txt"
+      "evidence": "evidence/pr03/tests.txt and demo.md"
     }
   ],
   "defect": {
-    "reproducer": "ros2 run patrol patrol: /cmd_vel has 1 publisher, 0 subscribers; turtle pose unchanged.",
-    "root_cause": "Relative cmd_vel resolves to /cmd_vel, different from turtlesim subscription /turtle1/cmd_vel.",
-    "proof_after": "Only remap changed to cmd_vel:=/turtle1/cmd_vel: 100 messages in 10.016 seconds, 10.000 Hz, Twist=(0.5,0.3), pose changed. SIGINT removes publisher; watchdog stops turtle. Latest local run: 2026-09-27."
+    "reproducer": "Without remap, /cmd_vel has 1 publisher and 0 subscribers; pose remains (5.54444456, 5.54444456, 0.0).",
+    "root_cause": "Relative cmd_vel resolves to /cmd_vel, while turtlesim subscribes to /turtle1/cmd_vel.",
+    "proof_after": "With only cmd_vel:=/turtle1/cmd_vel remap, 100 Twist messages arrived in 10.014 s at 10.001 Hz and pose changed to (3.97573185, 7.78509188, -1.92478526)."
   },
   "claims": {
     "public_tests_passed": true,
@@ -54,12 +44,10 @@
   },
   "time": {
     "contact_academic_hours": 0,
-    "self_study_hours": 0.207
+    "self_study_hours": 0
   },
-  "time_note": "Демонстрационная подготовка без контактной пары: время от создания тестов до первого оформления отчёта, включая загрузку образа. Не норматив трудоёмкости студента.",
+  "time_note": "Личное время студента в этой сессии не измерялось; заполнить перед сдачей.",
   "ai_used": true,
-  "recorded_at_utc": "2026-09-25T15:55:13.207646+00:00",
-  "runtime_note": "Real ROS 2 Lyrical and turtlesim, offscreen. Jazzy fallback import is provided but Jazzy is not tested.",
-  "ci_note": "GitVerse run 1648208 failed on the former implementation because the new CLI graph missed /turtle1/pose. After the fix, all workflow run steps passed locally in the pinned image with a clean Git clone and current evidence: Node bootstrap, 13 passed/1 inherited skip, real ROS experiment, kit checksum and PR03 contract. JavaScript checkout/post and a successful remote rerun are not claimed; owner pushes.",
-  "last_updated": "2026-09-27"
+  "recorded_at": "2026-10-05",
+  "ci_note": "Проверены локальные команды; GitHub Actions не запускался, поскольку коммиты и push пока запрещены."
 }
