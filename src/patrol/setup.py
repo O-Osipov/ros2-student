@@ -12,7 +12,7 @@ setup(
     zip_safe=True,
     maintainer='O-Osipov',
     maintainer_email='213808971+O-Osipov@users.noreply.github.com',
-    description='PR03: Pose subscription, timer and cmd_vel remapping',
+    description='PR04: validated live patrol parameters and timer updates',
     license='Apache-2.0',
     entry_points={'console_scripts': ['patrol = patrol.patrol:main']},
 )

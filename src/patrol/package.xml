@@ -2,11 +2,12 @@
 <package format="3">
   <name>patrol</name>
   <version>0.1.0</version>
-  <description>PR03: Pose subscription, timer and cmd_vel remapping</description>
+  <description>PR04: validated live patrol parameters and timer updates</description>
   <maintainer email="213808971+O-Osipov@users.noreply.github.com">O-Osipov</maintainer>
   <license>Apache-2.0</license>
   <buildtool_depend>ament_python</buildtool_depend>
   <exec_depend>rclpy</exec_depend>
+  <exec_depend>rcl_interfaces</exec_depend>
   <exec_depend>geometry_msgs</exec_depend>
   <exec_depend>turtlesim</exec_depend>
   <exec_depend condition="$ROS_DISTRO == lyrical">turtlesim_msgs</exec_depend>

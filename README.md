@@ -1,4 +1,66 @@
-# ПР03. Первая нода: поза и команда
+# ПР04. Параметры ноды patrol
+
+Локальная ветка `pr04` создана от личной `pr03`: преподавательская ветка
+`pr04` в GitVerse пока отсутствует. В этой работе нода `patrol` получила
+изменяемые параметры скорости и частоты публикации. Реализация и проверка
+описаны в [parameters.md](evidence/pr04/parameters.md); сырые результаты
+сохранены в [tests.txt](evidence/pr04/tests.txt) и
+[defect.txt](evidence/pr04/defect.txt). Push ветки не выполнялся.
+
+## Код и проверка
+
+- [Нода](src/patrol/patrol/patrol.py): параметры, проверка до применения,
+  пересоздание единственного таймера при допустимой смене `publish_hz`.
+- [Чистая функция](src/patrol/patrol/control.py) и
+  [тесты](src/patrol/test/test_parameters.py): диапазоны, нечисловые и
+  неконечные значения, атомарность отклонённого обновления.
+- [Живой сценарий](scripts/check_pr04.py) проверяет работающий turtlesim,
+  переход 10→5 Гц, отклонение 0 и −1, сервис `/clear` и обнаружение действия
+  `/turtle1/rotate_absolute`.
+- [Отчёт](evidence/pr04/report.json),
+  [GitHub Actions](.github/workflows/pr04.yml) и
+  [декларация использования ИИ](AI_USAGE.md).
+
+Проверенная среда: ROS 2 Lyrical, закреплённый Docker-образ курса. В
+терминале контейнера с репозиторием в `/work`:
+
+```bash
+cd /work
+source /opt/ros/lyrical/setup.bash
+export ROS_DOMAIN_ID=48
+export ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST
+export QT_QPA_PLATFORM=offscreen
+colcon build --symlink-install --packages-select turtle_bringup patrol
+source install/setup.bash
+python3 -m pytest -q src/patrol/test scripts/test_check_pr03.py
+python3 scripts/check_pr04.py
+```
+
+Живой сценарий использует настоящий turtlesim без окна и требует свободного
+ROS-домена. Отдельно проверить параметры вручную можно через
+`ros2 launch turtle_bringup sim.launch.py` и
+`ros2 run patrol patrol --ros-args -r cmd_vel:=/turtle1/cmd_vel` в двух
+терминалах с теми же переменными окружения и подключённым workspace.
+Команды `ros2 param set /patrol publish_hz 5.0` и
+`ros2 param set /patrol publish_hz 0.0` показывают принятие допустимого
+значения и отказ для нуля. Замер: `ros2 topic hz /turtle1/cmd_vel`.
+
+Результат локального прогона: сборка двух пакетов, **22 passed** в pytest,
+живой поток 9,998→4,999 Гц, сохранение 5 Гц после отказа в нуле и −1.
+При временно отключённой проверке ноль воспроизвёл `ZeroDivisionError`;
+проверка восстановлена. Команды и полный вывод находятся в evidence.
+
+Публичный checker из course kit `v1-w07` запускается локально:
+
+```bash
+python3 .course-kit/pr04/v1/tools/check_practice.py PR04 --submission . --json
+```
+
+Checker сопоставляет коммит реализации с SHA в `evidence/pr04/report.json`:
+после него могут меняться только evidence ПР04 и `AI_USAGE.md`.
+GitHub Actions не запускался, поскольку ветка не публиковалась.
+
+## ПР03: первая нода, поза и команда
 
 Ветка `pr03` продолжает `pr02`: пакет `turtle_bringup` сохранён, рядом добавлен
 `patrol`. Ветки `pr01`, `pr02` и `master` содержат прежние работы.
