@@ -1,0 +1,74 @@
+PR04 local verification, 2026-10-19
+ROS 2 Lyrical, Docker, ROS_DOMAIN_ID=48, offscreen turtlesim
+
+$ colcon build --symlink-install --packages-select turtle_bringup patrol
+Starting >>> patrol
+Starting >>> turtle_bringup
+Finished <<< turtle_bringup [1.46s]
+Finished <<< patrol [1.63s]
+
+Summary: 2 packages finished [1.76s]
+
+$ python3 -m pytest -q src/patrol/test scripts/test_check_pr03.py
+......................                                                   [100%]
+22 passed in 11.21s
+
+$ python3 scripts/check_pr04.py
+$ ros2 launch turtle_bringup sim.launch.py
+$ ros2 run patrol patrol --ros-args -r cmd_vel:=/turtle1/cmd_vel
+$ ros2 param get /patrol publish_hz
+exit=0
+Double value is: 10.0
+PASS defaults: 22 messages, 9.998 Hz, Twist=(0.5, 0.3)
+$ ros2 param set /patrol linear_speed 0.7
+exit=0
+Set parameter successful
+$ ros2 param set /patrol turn_rate -0.2
+exit=0
+Set parameter successful
+$ ros2 param set /patrol publish_hz 5.0
+exit=0
+Set parameter successful
+PASS update: 16 messages, 4.999 Hz, Twist=(0.7, -0.2)
+$ ros2 param set /patrol publish_hz 0.0
+exit=0
+
+stderr: Setting parameter failed: publish_hz must be a finite number in [1.0, 30.0]
+$ ros2 param get /patrol publish_hz
+exit=0
+Double value is: 5.0
+PASS reject 0.0: value=5.0, stream=5.000 Hz
+$ ros2 param set /patrol publish_hz -1.0
+exit=0
+
+stderr: Setting parameter failed: publish_hz must be a finite number in [1.0, 30.0]
+$ ros2 param get /patrol publish_hz
+exit=0
+Double value is: 5.0
+PASS reject -1.0: value=5.0, stream=5.002 Hz
+$ ros2 service call /clear std_srvs/srv/Empty {}
+exit=0
+waiting for service to become available...
+requester: making request: std_srvs.srv.Empty_Request()
+
+response:
+std_srvs.srv.Empty_Response()
+$ ros2 action list -t
+exit=0
+/turtle1/rotate_absolute [turtlesim_msgs/action/RotateAbsolute]
+PASS /clear service and /turtle1/rotate_absolute action discovery
+PASS PR04 live experiment
+
+$ ros2 run patrol patrol --ros-args -p publish_hz:=0.0 (startup validation)
+Traceback (most recent call last):
+  File "/work/install/patrol/lib/patrol/patrol", line 33, in <module>
+    sys.exit(load_entry_point('patrol', 'console_scripts', 'patrol')())
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/work/build/patrol/patrol/patrol.py", line 78, in main
+    node = Patrol()
+  File "/work/build/patrol/patrol/patrol.py", line 29, in __init__
+    raise ValueError(reason)
+ValueError: publish_hz must be a finite number in [1.0, 30.0]
+[ros2run]: Process exited with failure 1
+
+Expected startup exit=1; validation error, no division by zero.

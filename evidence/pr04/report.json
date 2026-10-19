@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "practice_id": "PR04",
+  "commit": "dcea992925e47569fb8f8a370402efcc0aa729a6",
+  "course_kit": {
+    "version": "v1-w07",
+    "archive_sha256": "001f7ec79674d09a0f7eff2ad0935f58c95101b0cf200425c368f41579d6a31c"
+  },
+  "commands": [
+    "colcon build --symlink-install --packages-select turtle_bringup patrol",
+    "python3 -m pytest -q src/patrol/test scripts/test_check_pr03.py",
+    "python3 scripts/check_pr04.py",
+    "ros2 param set /patrol publish_hz 5.0",
+    "ros2 param set /patrol publish_hz 0.0",
+    "ros2 service call /clear std_srvs/srv/Empty {}",
+    "ros2 action list -t"
+  ],
+  "tests": [
+    {
+      "name": "Pure validation, parameter callbacks and PR03 regression",
+      "status": "passed",
+      "evidence": "evidence/pr04/tests.txt: 22 passed"
+    },
+    {
+      "name": "Real turtlesim: 10 to 5 Hz, speed changes, zero and negative rejection, service and action",
+      "status": "passed",
+      "evidence": "evidence/pr04/tests.txt"
+    },
+    {
+      "name": "Validation-disabled zero-frequency defect",
+      "status": "passed",
+      "evidence": "evidence/pr04/defect.txt: ZeroDivisionError and patrol exit 1"
+    },
+    {
+      "name": "Invalid startup override rejected before timer creation",
+      "status": "passed",
+      "evidence": "evidence/pr04/tests.txt"
+    }
+  ],
+  "defect": {
+    "reproducer": "With on-set validation temporarily disabled, ros2 param set /patrol publish_hz 0.0 caused patrol exit 1 with ZeroDivisionError in create_timer(1.0 / new_hz).",
+    "root_cause": "The post-set callback divided by the accepted zero frequency when calculating the new timer period.",
+    "proof_after": "With validation restored, ros2 param set /patrol publish_hz 0.0 was rejected; get remained 5.0 and the command stream continued at 5.000 Hz. A valid 10 to 5 Hz update changed the stream to 4.999 Hz."
+  },
+  "claims": {
+    "public_tests_passed": true,
+    "defect_reproduced": true,
+    "defect_fixed": true
+  },
+  "time": {
+    "contact_academic_hours": 0,
+    "self_study_hours": 0
+  },
+  "time_note": "Личное время студента не измерялось в этой сессии; заполнить перед сдачей.",
+  "ai_used": true,
+  "recorded_at": "2026-10-19",
+  "ci_note": "Локальные тесты и живой опыт прошли. GitHub Actions не запускался: ветка не отправлялась в GitHub."
+}
