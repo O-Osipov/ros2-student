@@ -1,0 +1,373 @@
+$ ros2 node list
+exit=0
+/robot_a/patrol
+/robot_a/pose_listener
+/robot_a/pose_relay
+/rosbag2_recorder
+/turtlesim
+
+$ ros2 topic list -t
+exit=0
+/events/rosbag2_messages_lost [rosbag2_interfaces/msg/MessagesLostEvent]
+/events/write_split [rosbag2_interfaces/msg/WriteSplitEvent]
+/parameter_events [rcl_interfaces/msg/ParameterEvent]
+/robot_a/sensor_pose [turtlesim_msgs/msg/Pose]
+/rosout [rcl_interfaces/msg/Log]
+/turtle1/cmd_vel [geometry_msgs/msg/Twist]
+/turtle1/color_sensor [turtlesim_msgs/msg/Color]
+/turtle1/pose [turtlesim_msgs/msg/Pose]
+
+$ ros2 topic info /robot_a/sensor_pose --verbose
+exit=0
+Type: turtlesim_msgs/msg/Pose
+
+Publisher count: 1
+
+Node name: pose_relay
+Node namespace: /robot_a
+Topic type: turtlesim_msgs/msg/Pose
+Topic type hash: RIHS01_37b07ace09a0ed2c5b774b1410dec972dfd1d292de5656ebc2b075ac646e09c8
+Endpoint type: PUBLISHER
+GID: 01.0f.eb.7d.44.06.07.9c.00.00.00.00.00.00.13.03
+QoS profile:
+  Reliability: BEST_EFFORT
+  History (Depth): KEEP_LAST (10)
+  Durability: VOLATILE
+  Lifespan: Infinite
+  Deadline: Infinite
+  Liveliness: AUTOMATIC
+  Liveliness lease duration: Infinite
+
+Subscription count: 2
+
+Node name: pose_listener
+Node namespace: /robot_a
+Topic type: turtlesim_msgs/msg/Pose
+Topic type hash: RIHS01_37b07ace09a0ed2c5b774b1410dec972dfd1d292de5656ebc2b075ac646e09c8
+Endpoint type: SUBSCRIPTION
+GID: 01.0f.eb.7d.45.06.69.e1.00.00.00.00.00.00.13.04
+QoS profile:
+  Reliability: BEST_EFFORT
+  History (Depth): KEEP_LAST (10)
+  Durability: VOLATILE
+  Lifespan: Infinite
+  Deadline: Infinite
+  Liveliness: AUTOMATIC
+  Liveliness lease duration: Infinite
+
+Node name: rosbag2_recorder
+Node namespace: /
+Topic type: turtlesim_msgs/msg/Pose
+Topic type hash: RIHS01_37b07ace09a0ed2c5b774b1410dec972dfd1d292de5656ebc2b075ac646e09c8
+Endpoint type: SUBSCRIPTION
+GID: 01.0f.eb.7d.46.06.c6.e4.00.00.00.00.00.00.26.04
+QoS profile:
+  Reliability: BEST_EFFORT
+  History (Depth): KEEP_LAST (10)
+  Durability: VOLATILE
+  Lifespan: Infinite
+  Deadline: Infinite
+  Liveliness: AUTOMATIC
+  Liveliness lease duration: Infinite
+
+
+$ timeout 8s ros2 topic echo /robot_a/sensor_pose --qos-reliability best_effort --once
+exit=0
+x: 7.012256622314453
+y: 6.4290900230407715
+theta: 1.0800000429153442
+linear_velocity: 0.5
+angular_velocity: 0.30000001192092896
+---
+
+$ ros2 launch ... record:=true subscriber_reliability:=best_effort
+[INFO] [launch]: All log files can be found below /home/ubuntu/.ros/log/2026-10-26-11-52-25-819839-pr01-demo-1594
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [launch.user]: PR05 namespace=/robot_a, record=true, bag_dir=evidence/pr05/bag-2, subscriber_reliability=best_effort
+[INFO] [turtlesim_node-1]: process started with pid [1602]
+[INFO] [patrol-2]: process started with pid [1603]
+[INFO] [pose_relay-3]: process started with pid [1604]
+[INFO] [pose_listener-4]: process started with pid [1605]
+[INFO] [ros2-5]: process started with pid [1606]
+[turtlesim_node-1] [INFO] [1793015545.970760222] [turtlesim]: Starting turtlesim with node name /turtlesim
+[turtlesim_node-1] [INFO] [1793015545.977174332] [turtlesim]: Spawning turtle [turtle1] at x=[5.544445], y=[5.544445], theta=[0.000000]
+[ros2-5] stdin is not a terminal device. Keyboard handling disabled.[INFO] [1793015548.127203361] [rosbag2_recorder]: Press SPACE for pausing/resuming
+[ros2-5] [INFO] [1793015548.127871534] [rosbag2_recorder]: Event publisher thread: Started
+[ros2-5] [INFO] [1793015548.143336954] [rosbag2_recorder]: Starting recording to 'evidence/pr05/bag-2'
+[ros2-5] [WARN] [1793015548.143379733] [rosbag2_recorder]: No input serialization format specified, using default rmw serialization format: 'cdr'.
+[ros2-5] [INFO] [1793015548.150691929] [rosbag2_recorder]: Listening for topics...
+[ros2-5] [INFO] [1793015548.150750955] [rosbag2_recorder]: Recording...
+[ros2-5] [INFO] [1793015548.150845780] [rosbag2_recorder]: Topics discovery started.
+[pose_listener-4] [INFO] [1793015548.189129471] [robot_a.pose_listener]: Listening to sensor_pose with best_effort reliability
+[ros2-5] [INFO] [1793015548.241032640] [rosbag2_recorder]: Subscribed to topic '/robot_a/sensor_pose'
+[ros2-5] [INFO] [1793015548.241075700] [rosbag2_recorder]: All requested topics are subscribed. Stopping discovery...
+[ros2-5] [INFO] [1793015548.241079485] [rosbag2_recorder]: Topics discovery stopped.
+[pose_listener-4] [INFO] [1793015548.283478135] [robot_a.pose_listener]: received sensor_pose #1: x=5.656, y=5.548
+[pose_listener-4] [INFO] [1793015548.550210559] [robot_a.pose_listener]: received sensor_pose #20: x=5.807, y=5.566
+[pose_listener-4] [INFO] [1793015548.864540521] [robot_a.pose_listener]: received sensor_pose #40: x=5.964, y=5.599
+[pose_listener-4] [INFO] [1793015549.185338982] [robot_a.pose_listener]: received sensor_pose #60: x=6.116, y=5.647
+[pose_listener-4] [INFO] [1793015549.504777683] [robot_a.pose_listener]: received sensor_pose #80: x=6.264, y=5.709
+[pose_listener-4] [INFO] [1793015549.827326256] [robot_a.pose_listener]: received sensor_pose #100: x=6.404, y=5.786
+[pose_listener-4] [INFO] [1793015550.144548812] [robot_a.pose_listener]: received sensor_pose #120: x=6.537, y=5.875
+[pose_listener-4] [INFO] [1793015550.465566841] [robot_a.pose_listener]: received sensor_pose #140: x=6.660, y=5.977
+[pose_listener-4] [INFO] [1793015550.784874238] [robot_a.pose_listener]: received sensor_pose #160: x=6.773, y=6.090
+[pose_listener-4] [INFO] [1793015551.103871978] [robot_a.pose_listener]: received sensor_pose #180: x=6.875, y=6.213
+[pose_listener-4] [INFO] [1793015551.426758867] [robot_a.pose_listener]: received sensor_pose #200: x=6.965, y=6.346
+[pose_listener-4] [INFO] [1793015551.744874350] [robot_a.pose_listener]: received sensor_pose #220: x=7.041, y=6.486
+[pose_listener-4] [INFO] [1793015552.067014043] [robot_a.pose_listener]: received sensor_pose #240: x=7.104, y=6.633
+[pose_listener-4] [INFO] [1793015552.383870335] [robot_a.pose_listener]: received sensor_pose #260: x=7.152, y=6.786
+[pose_listener-4] [INFO] [1793015552.705229118] [robot_a.pose_listener]: received sensor_pose #280: x=7.185, y=6.942
+[pose_listener-4] [INFO] [1793015553.026073951] [robot_a.pose_listener]: received sensor_pose #300: x=7.203, y=7.101
+[pose_listener-4] [INFO] [1793015553.345045092] [robot_a.pose_listener]: received sensor_pose #320: x=7.206, y=7.261
+[pose_listener-4] [INFO] [1793015553.665164428] [robot_a.pose_listener]: received sensor_pose #340: x=7.194, y=7.421
+[pose_listener-4] [INFO] [1793015553.986699736] [robot_a.pose_listener]: received sensor_pose #360: x=7.166, y=7.578
+[pose_listener-4] [INFO] [1793015554.305098161] [robot_a.pose_listener]: received sensor_pose #380: x=7.124, y=7.732
+[pose_listener-4] [INFO] [1793015554.624814299] [robot_a.pose_listener]: received sensor_pose #400: x=7.066, y=7.882
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[INFO] [ros2-5]: sending signal 'SIGINT' to process[ros2-5]
+[INFO] [pose_listener-4]: sending signal 'SIGINT' to process[pose_listener-4]
+[INFO] [pose_relay-3]: sending signal 'SIGINT' to process[pose_relay-3]
+[INFO] [patrol-2]: sending signal 'SIGINT' to process[patrol-2]
+[INFO] [turtlesim_node-1]: sending signal 'SIGINT' to process[turtlesim_node-1]
+[ros2-5] [INFO] [1793015554.886448420] [rosbag2_cpp]: Writing remaining messages from cache to the bag. It may take a while
+[ros2-5] [INFO] [1793015554.900036884] [rosbag2_recorder]: Recording stopped
+[turtlesim_node-1] [INFO] [1793015554.889976608] [rclcpp]: signal_handler(signum=2)
+[pose_relay-3] Traceback (most recent call last):
+[pose_relay-3]   File "/work/install/course_bringup/lib/course_bringup/pose_relay", line 33, in <module>
+[pose_relay-3]     sys.exit(load_entry_point('course-bringup', 'console_scripts', 'pose_relay')())
+[pose_relay-3]              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+[pose_relay-3]   File "/work/build/course_bringup/course_bringup/pose_relay.py", line 38, in main
+[pose_relay-3]     node.destroy_node()
+[pose_relay-3]     ~~~~~~~~~~~~~~~~~^^
+[pose_relay-3]   File "/opt/ros/lyrical/lib/python3.14/site-packages/rclpy/node.py", line 2708, in destroy_node
+[pose_relay-3]     self.destroy_service(self._services[0])
+[pose_relay-3]     ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+[pose_relay-3]   File "/opt/ros/lyrical/lib/python3.14/site-packages/rclpy/node.py", line 2642, in destroy_service
+[pose_relay-3]     service.destroy()
+[pose_relay-3]     ~~~~~~~~~~~~~~~^^
+[pose_relay-3]   File "/opt/ros/lyrical/lib/python3.14/site-packages/rclpy/service.py", line 129, in destroy
+[pose_relay-3]     self._destroy()
+[pose_relay-3]     ~~~~~~~~~~~~~^^
+[pose_relay-3]   File "/opt/ros/lyrical/lib/python3.14/site-packages/rclpy/service.py", line 132, in _destroy
+[pose_relay-3]     self.handle.destroy_when_not_in_use()
+[pose_relay-3]     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+[pose_relay-3] KeyboardInterrupt
+[turtlesim_node-1] [INFO] [1793015554.913200302] [rclcpp]: signal_handler(signum=2)
+[patrol-2] Traceback (most recent call last):
+[pose_listener-4] Traceback (most recent call last):
+[pose_listener-4]   File "/work/install/course_bringup/lib/course_bringup/pose_listener", line 33, in <module>
+[pose_listener-4]     sys.exit(load_entry_point('course-bringup', 'console_scripts', 'pose_listener')())
+[pose_listener-4]              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+[pose_listener-4]   File "/work/build/course_bringup/course_bringup/pose_listener.py", line 52, in main
+[pose_listener-4]     node.destroy_node()
+[pose_listener-4]     ~~~~~~~~~~~~~~~~~^^
+[pose_listener-4]   File "/opt/ros/lyrical/lib/python3.14/site-packages/rclpy/node.py", line 2708, in destroy_node
+[pose_listener-4]     self.destroy_service(self._services[0])
+[pose_listener-4]     ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+[pose_listener-4]   File "/opt/ros/lyrical/lib/python3.14/site-packages/rclpy/node.py", line 2642, in destroy_service
+[pose_listener-4]     service.destroy()
+[pose_listener-4]     ~~~~~~~~~~~~~~~^^
+[pose_listener-4]   File "/opt/ros/lyrical/lib/python3.14/site-packages/rclpy/service.py", line 129, in destroy
+[pose_listener-4]     self._destroy()
+[pose_listener-4]     ~~~~~~~~~~~~~^^
+[pose_listener-4]   File "/opt/ros/lyrical/lib/python3.14/site-packages/rclpy/service.py", line 132, in _destroy
+[pose_listener-4]     self.handle.destroy_when_not_in_use()
+[pose_listener-4]     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+[pose_listener-4] KeyboardInterrupt
+[ros2-5] [INFO] [1793015554.917333746] [rosbag2_recorder]: Event publisher thread: Exited
+[patrol-2]   File "/work/install/patrol/lib/patrol/patrol", line 33, in <module>
+[patrol-2]     sys.exit(load_entry_point('patrol', 'console_scripts', 'patrol')())
+[patrol-2]              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+[patrol-2]   File "/work/build/patrol/patrol/patrol.py", line 84, in main
+[patrol-2]     node.destroy_node()
+[patrol-2]     ~~~~~~~~~~~~~~~~~^^
+[patrol-2]   File "/opt/ros/lyrical/lib/python3.14/site-packages/rclpy/node.py", line 2708, in destroy_node
+[patrol-2]     self.destroy_service(self._services[0])
+[patrol-2]     ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+[patrol-2]   File "/opt/ros/lyrical/lib/python3.14/site-packages/rclpy/node.py", line 2642, in destroy_service
+[patrol-2]     service.destroy()
+[patrol-2]     ~~~~~~~~~~~~~~~^^
+[patrol-2]   File "/opt/ros/lyrical/lib/python3.14/site-packages/rclpy/service.py", line 129, in destroy
+[patrol-2]     self._destroy()
+[patrol-2]     ~~~~~~~~~~~~~^^
+[patrol-2]   File "/opt/ros/lyrical/lib/python3.14/site-packages/rclpy/service.py", line 132, in _destroy
+[patrol-2]     self.handle.destroy_when_not_in_use()
+[patrol-2]     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+[patrol-2] KeyboardInterrupt
+[ros2-5] Exception ignored on threading shutdown:
+[ros2-5] Traceback (most recent call last):
+[ros2-5]   File "/usr/lib/python3.14/threading.py", line 1559, in _shutdown
+[ros2-5]     def _shutdown():
+[ros2-5] KeyboardInterrupt:
+[INFO] [turtlesim_node-1]: process has finished cleanly [pid 1602]
+[ERROR] [pose_relay-3]: process has died [pid 1604, exit code -2, cmd '/work/install/course_bringup/lib/course_bringup/pose_relay --ros-args -r __ns:=/robot_a -r turtle1/pose:=/turtle1/pose'].
+[ERROR] [pose_listener-4]: process has died [pid 1605, exit code -2, cmd '/work/install/course_bringup/lib/course_bringup/pose_listener --ros-args -r __ns:=/robot_a --params-file /tmp/launch_params_get79972'].
+[ERROR] [patrol-2]: process has died [pid 1603, exit code -2, cmd '/work/install/patrol/lib/patrol/patrol --ros-args -r __ns:=/robot_a -r turtle1/pose:=/turtle1/pose -r cmd_vel:=/turtle1/cmd_vel'].
+[INFO] [ros2-5]: process has finished cleanly [pid 1606]
+
+$ ros2 bag info evidence/pr05/bag-2
+exit=0
+
+Files:             0_bag-2_2026_10_26-11_52_28.mcap
+Bag size:          33.6 KiB
+Storage id:        mcap
+ROS Distro:        lyrical
+Duration:          6.597948378s
+Start:             Oct 26 2026 11:52:28.282432460 (1793015548.282432460)
+End:               Oct 26 2026 11:52:34.880380838 (1793015554.880380838)
+Messages:          416
+Topic information: Topic: /robot_a/sensor_pose | Type: turtlesim_msgs/msg/Pose | Count: 416 | Serialization Format: cdr
+Services:          0
+Service information:
+Actions:           0
+Action information:
+
+$ timeout 3s ros2 topic echo /robot_a/sensor_pose --qos-reliability reliable --once
+exit=124
+
+$ timeout 8s ros2 topic echo /robot_a/sensor_pose --qos-reliability best_effort --once
+exit=0
+x: 5.971488952636719
+y: 5.601144313812256
+theta: 0.25920000672340393
+linear_velocity: 0.5
+angular_velocity: 0.30000001192092896
+---
+
+$ ros2 bag play ... --qos-profile-overrides-path config/qos-overrides.yaml
+stdin is not a terminal device. Keyboard handling disabled.[INFO] [1793015556.118293389] [rosbag2_player]: Set rate to 1
+[2K
+[2K
+[2K====== Playback Progress ======
+[2K[1793015548.282432556] Duration 0.00/6.60 [R]
+[4A[INFO] [1793015556.118416522] [rosbag2_player]: Overriding QoS profile for topic /robot_a/sensor_pose
+[INFO] [1793015556.125300337] [rosbag2_player]: Adding keyboard callbacks.
+[INFO] [1793015556.125365857] [rosbag2_player]: Press SPACE for Pause/Resume
+[INFO] [1793015556.125374737] [rosbag2_player]: Press CURSOR_RIGHT for Play Next Message
+[INFO] [1793015556.125382473] [rosbag2_player]: Press CURSOR_UP for Increase Rate 10%
+[INFO] [1793015556.125388773] [rosbag2_player]: Press CURSOR_DOWN for Decrease Rate 10%
+Progress bar enabled at 3 Hz.
+Progress bar [?]: [R]unning, [P]aused, [B]urst, [D]elayed, [S]topped
+[2K
+[2K
+[2K====== Playback Progress ======
+[2K[1793015548.282432556] Duration 0.00/6.60 [S]
+[4A[INFO] [1793015556.126839532] [rosbag2_player]: Playback until timestamp: -1
+[2K
+[2K
+[2K====== Playback Progress ======
+[2K[1793015548.282432556] Duration 0.00/6.60 [R]
+[4A[2K
+[2K
+[2K====== Playback Progress ======
+[2K[1793015548.282432556] Duration 0.00/6.60 [R]
+[4A[2K
+[2K
+[2K====== Playback Progress ======
+[2K[1793015548.623257637] Duration 0.34/6.60 [R]
+[4A[2K
+[2K
+[2K====== Playback Progress ======
+[2K[1793015548.962202072] Duration 0.68/6.60 [R]
+[4A[2K
+[2K
+[2K====== Playback Progress ======
+[2K[1793015549.297214985] Duration 1.01/6.60 [R]
+[4A[2K
+[2K
+[2K====== Playback Progress ======
+[2K[1793015549.630996466] Duration 1.35/6.60 [R]
+[4A[2K
+[2K
+[2K====== Playback Progress ======
+[2K[1793015549.968122721] Duration 1.69/6.60 [R]
+[4A[2K
+[2K
+[2K====== Playback Progress ======
+[2K[1793015550.303848505] Duration 2.02/6.60 [R]
+[4A[2K
+[2K
+[2K====== Playback Progress ======
+[2K[1793015550.640955448] Duration 2.36/6.60 [R]
+[4A[2K
+[2K
+[2K====== Playback Progress ======
+[2K[1793015550.976361036] Duration 2.69/6.60 [R]
+[4A[2K
+[2K
+[2K====== Playback Progress ======
+[2K[1793015551.311453342] Duration 3.03/6.60 [R]
+[4A[2K
+[2K
+[2K====== Playback Progress ======
+[2K[1793015551.647762060] Duration 3.37/6.60 [R]
+[4A[2K
+[2K
+[2K====== Playback Progress ======
+[2K[1793015551.984070539] Duration 3.70/6.60 [R]
+[4A[2K
+[2K
+[2K====== Playback Progress ======
+[2K[1793015552.320932388] Duration 4.04/6.60 [R]
+[4A[2K
+[2K
+[2K====== Playback Progress ======
+[2K[1793015552.656712532] Duration 4.37/6.60 [R]
+[4A[2K
+[2K
+[2K====== Playback Progress ======
+[2K[1793015552.991807699] Duration 4.71/6.60 [R]
+[4A[2K
+[2K
+[2K====== Playback Progress ======
+[2K[1793015553.327243805] Duration 5.04/6.60 [R]
+[4A[2K
+[2K
+[2K====== Playback Progress ======
+[2K[1793015553.663923025] Duration 5.38/6.60 [R]
+[4A[2K
+[2K
+[2K====== Playback Progress ======
+[2K[1793015553.999708652] Duration 5.72/6.60 [R]
+[4A[2K
+[2K
+[2K====== Playback Progress ======
+[2K[1793015554.336867094] Duration 6.05/6.60 [R]
+[4A[2K
+[2K
+[2K====== Playback Progress ======
+[2K[1793015554.671966553] Duration 6.39/6.60 [R]
+[4A[2K
+[2K
+[2K====== Playback Progress ======
+[2K[1793015554.671966553] Duration 6.39/6.60 [R]
+[4A[2K
+[2K
+[2K====== Playback Progress ======
+[2K[1793015548.323889256] Duration 0.04/6.60 [R]
+[4A[2K
+[2K
+[2K====== Playback Progress ======
+[2K[1793015548.672034025] Duration 0.39/6.60 [R]
+[4A[2K
+[2K
+[2K====== Playback Progress ======
+[2K[1793015549.009206057] Duration 0.73/6.60 [R]
+[4A[INFO] [1793015562.738843016] [rosbag2_player]: Stopping playback.
+[2K
+[2K
+[2K====== Playback Progress ======
+[2K[1793015549.009206057] Duration 0.73/6.60 [S]
+[4A[2K
+[2K
+[2K====== Playback Progress ======
+[2K[1793015549.009206057] Duration 0.73/6.60 [R]
+[4A[2K
+[2K
+[2K====== Playback Progress ======
+[2K[1793015549.009206057] Duration 0.73/6.60 [R]
+[4A[2K
+[2K
+[2K====== Playback Progress ======
+[2K[1793015549.009206057] Duration 0.73/6.60 [R]
+[4A[4B

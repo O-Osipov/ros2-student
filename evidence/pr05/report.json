@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "practice_id": "PR05",
+  "commit": "9763df93a08d990f4ad3e3bce3e3b9352e84c943",
+  "course_kit": {
+    "version": "v1-w08",
+    "archive_sha256": "aea8efd0a51668af63f2e475b82bfa28bd76c21f20d8afea6b136d43a56a88fb"
+  },
+  "commands": [
+    "colcon build --symlink-install --packages-select turtle_bringup patrol course_bringup",
+    "colcon test --packages-select turtle_bringup patrol course_bringup",
+    "colcon test-result --verbose",
+    "python3 -m pytest -q src/course_bringup/test/test_qos.py src/patrol/test scripts/test_check_pr03.py",
+    "python3 scripts/check_pr05.py --evidence-dir evidence/pr05",
+    "ros2 bag info evidence/pr05/bag-2",
+    "ros2 bag play evidence/pr05/bag-2 -l --qos-profile-overrides-path config/qos-overrides.yaml"
+  ],
+  "tests": [
+    {
+      "name": "colcon unit and lint checks for turtle_bringup, patrol and course_bringup",
+      "status": "passed",
+      "evidence": "evidence/pr05/tests.txt: 24 tests, 0 errors, 0 failures, 1 skipped; 5 additional CLI-script tests passed"
+    },
+    {
+      "name": "Real turtlesim: visible topic but no reliable delivery",
+      "status": "passed",
+      "evidence": "evidence/pr05/qos-before.txt"
+    },
+    {
+      "name": "Live best_effort delivery and single-topic MCAP",
+      "status": "passed",
+      "evidence": "evidence/pr05/qos-after.txt and bag-metadata.yaml: 416 messages"
+    },
+    {
+      "name": "Same MCAP replay with best_effort override",
+      "status": "passed",
+      "evidence": "evidence/pr05/qos-after.txt: reliable timeout, best_effort Pose"
+    }
+  ],
+  "defect": {
+    "reproducer": "With record=false and subscriber_reliability=reliable, /robot_a/sensor_pose was visible but reliable echo timed out with exit 124; ROS logged incompatible QoS RELIABILITY.",
+    "root_cause": "The sensor publisher offers best_effort, which cannot satisfy a reliable subscription request.",
+    "proof_after": "With subscriber_reliability=best_effort the live echo and listener received Pose; one MCAP stored 416 Pose messages; replay of that same MCAP with best_effort override again delivered Pose while reliable echo timed out."
+  },
+  "claims": {
+    "public_tests_passed": true,
+    "defect_reproduced": true,
+    "defect_fixed": true,
+    "replay_verified": true
+  },
+  "time": {
+    "contact_academic_hours": 0,
+    "self_study_hours": 0
+  },
+  "time_note": "Личное время студента не измерялось в этой сессии; заполнить перед сдачей.",
+  "ai_used": true,
+  "recorded_at": "2026-10-26",
+  "ci_note": "Локальные функциональные проверки прошли. GitHub Actions не запускался: ветка ПР05 ещё не отправлялась в GitHub."
+}
