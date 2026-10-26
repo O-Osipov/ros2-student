@@ -14,5 +14,6 @@ setup(
     maintainer_email='213808971+O-Osipov@users.noreply.github.com',
     description='PR04: validated live patrol parameters and timer updates',
     license='Apache-2.0',
+    extras_require={'test': ['pytest']},
     entry_points={'console_scripts': ['patrol = patrol.patrol:main']},
 )

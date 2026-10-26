@@ -24,7 +24,8 @@ def test_received_pose_allows_fixed_command_without_mutation(x, y, theta):
 
 
 def test_subscription_updates_state_and_timer_uses_it():
-    rclpy.init(args=['--ros-args', '-r', '__ns:=/pr03_test'])
+    rclpy.init(args=['--ros-args', '-r', '__ns:=/pr03_test',
+                     '-r', 'turtle1/pose:=/turtle1/pose'])
     node = Patrol()
     observer = Node('observer')
     executor = SingleThreadedExecutor()

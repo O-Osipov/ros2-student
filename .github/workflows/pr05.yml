@@ -1,0 +1,61 @@
+name: PR05 — Launch, QoS и MCAP
+
+on:
+  push:
+    branches: [pr05]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  practice:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    container:
+      image: osrf/ros:lyrical-desktop-full@sha256:e6b1cb530b65588279681db53784e264ce5cf83f2cc33e689d27d6024d7f3ebe
+      options: --user 0
+    env:
+      ROS_DOMAIN_ID: '55'
+      ROS_AUTOMATIC_DISCOVERY_RANGE: LOCALHOST
+      QT_QPA_PLATFORM: offscreen
+      COURSE_KIT_URL: https://ros.lms.ci.nsu.ru/downloads/robotics-course-kit-v1-w08-aea8efd0a516.tar.gz
+      COURSE_KIT_SHA256: aea8efd0a51668af63f2e475b82bfa28bd76c21f20d8afea6b136d43a56a88fb
+    steps:
+      - name: Подготовить Node.js для checkout в ROS-контейнере
+        shell: bash
+        run: |
+          set -euo pipefail
+          apt-get update
+          DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends nodejs
+          node -e 'if (Number(process.versions.node.split(".")[0]) < 20) process.exit(1)'
+      - name: Получить всю историю коммитов
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Собрать и проверить ПР05 в ROS
+        shell: bash
+        run: |
+          set -eo pipefail
+          source /opt/ros/lyrical/setup.bash
+          colcon build --symlink-install --packages-select turtle_bringup patrol course_bringup
+          source install/setup.bash
+          ros2 launch course_bringup patrol.launch.py --show-args
+          colcon test --packages-select turtle_bringup patrol course_bringup
+          colcon test-result --verbose
+          python3 -m pytest -q scripts/test_check_pr03.py
+          python3 scripts/check_pr05.py
+      - name: Скачать и сверить course kit
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSLo course-kit.tar.gz "$COURSE_KIT_URL"
+          printf '%s  %s\n' "$COURSE_KIT_SHA256" course-kit.tar.gz | sha256sum -c -
+          mkdir -p .course-kit/pr05
+          tar -xzf course-kit.tar.gz -C .course-kit/pr05
+      - name: Проверить отчёт ПР05
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m json.tool evidence/pr05/report.json > /dev/null
+          python3 .course-kit/pr05/v1/tools/check_practice.py PR05 --submission .

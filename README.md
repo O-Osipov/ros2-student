@@ -1,11 +1,92 @@
-# ПР04. Параметры ноды patrol
+# ПР05. Launch, QoS и повтор записи
+
+Ветка `pr05` создана от локальной `pr04`, поскольку преподавательской ветки
+`pr05` на GitVerse пока нет. Пакет [course_bringup](src/course_bringup/package.xml)
+запускает одним [launch-файлом](src/course_bringup/launch/patrol.launch.py)
+глобальный turtlesim, namespaced `patrol`, `pose_relay` и `pose_listener`.
+При `record:=true` тот же launch запускает запись `/robot_a/sensor_pose`
+в MCAP; при `false` recorder не запускается.
+
+`pose_relay` подписывается на относительный `turtle1/pose`, который launch
+переназначает в `/turtle1/pose`, и публикует относительный `sensor_pose`
+с `best_effort`. `pose_listener` запрашивает `reliable` или `best_effort`
+через аргумент `subscriber_reliability`. Для `patrol` launch также
+переназначает выход в глобальный `/turtle1/cmd_vel`. Внутри новых нод имена
+топиков относительные, а полные имена задаёт launch.
+
+## Проверка ПР05
+
+В контейнере с ROS 2 Lyrical и репозиторием в `/work`:
+
+```bash
+cd /work
+source /opt/ros/lyrical/setup.bash
+export ROS_DOMAIN_ID=55
+export ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST
+export QT_QPA_PLATFORM=offscreen
+colcon build --symlink-install --packages-select turtle_bringup patrol course_bringup
+source install/setup.bash
+colcon test --packages-select turtle_bringup patrol course_bringup
+colcon test-result --verbose
+python3 -m pytest -q scripts/test_check_pr03.py
+python3 scripts/check_pr05.py
+```
+
+Последняя команда запускает настоящий turtlesim без окна, повторяет
+несовместимый и совместимый QoS, записывает **один** сенсорный топик в MCAP,
+затем проигрывает ту же запись с
+[QoS override](config/qos-overrides.yaml). Для сохранения новых сырых
+выводов добавьте `--evidence-dir evidence/pr05`; bag остаётся в этом
+каталоге локально и игнорируется Git. Выберите свободный ROS-домен.
+
+Ручной запуск до исправления:
+
+```bash
+ros2 launch course_bringup patrol.launch.py namespace:=robot_a record:=false subscriber_reliability:=reliable
+ros2 topic info /robot_a/sensor_pose --verbose
+timeout 3s ros2 topic echo /robot_a/sensor_pose --qos-reliability reliable --once
+```
+
+После остановки launch запустите совместимый профиль и запись, указав новый
+неиспользованный каталог для bag:
+
+```bash
+ros2 launch course_bringup patrol.launch.py namespace:=robot_a record:=true bag_dir:=/tmp/pr05-manual-bag subscriber_reliability:=best_effort
+timeout 8s ros2 topic echo /robot_a/sensor_pose --qos-reliability best_effort --once
+ros2 bag info /tmp/pr05-manual-bag
+ros2 bag play /tmp/pr05-manual-bag --qos-profile-overrides-path config/qos-overrides.yaml
+```
+
+`ros2 bag info` и `ros2 bag play` запускаются после остановки записи.
+Все команды используют одно и то же значение `ROS_DOMAIN_ID`.
+Полученные [логи до](evidence/pr05/qos-before.txt),
+[логи после и replay](evidence/pr05/qos-after.txt),
+[метаданные bag](evidence/pr05/bag-metadata.yaml) и
+[разбор опыта](evidence/pr05/experiment.md) сохранены в evidence.
+Сводка тестов находится в [tests.txt](evidence/pr05/tests.txt).
+В проверенном прогоне `colcon test-result` показал 24 теста без ошибок
+и один пропуск; отдельный pytest для сценария ПР03 тоже прошёл.
+MCAP содержит 416 сообщений одного топика.
+
+Публичный checker для course kit `v1-w08`:
+
+```bash
+python3 .course-kit/pr05/v1/tools/check_practice.py PR05 --submission . --json
+```
+
+Checker требует коммит реализации и его полный SHA в
+`evidence/pr05/report.json`, затем отдельный коммит evidence. Функциональные
+испытания проведены локально. Push ПР05 пока не выполнялся.
+
+## ПР04: параметры ноды patrol
 
 Локальная ветка `pr04` создана от личной `pr03`: преподавательская ветка
 `pr04` в GitVerse пока отсутствует. В этой работе нода `patrol` получила
 изменяемые параметры скорости и частоты публикации. Реализация и проверка
 описаны в [parameters.md](evidence/pr04/parameters.md); сырые результаты
 сохранены в [tests.txt](evidence/pr04/tests.txt) и
-[defect.txt](evidence/pr04/defect.txt). Push ветки не выполнялся.
+[defect.txt](evidence/pr04/defect.txt). Позднее ветка `pr04` была отправлена
+в личный GitHub.
 
 ## Код и проверка
 
@@ -58,7 +139,7 @@ python3 .course-kit/pr04/v1/tools/check_practice.py PR04 --submission . --json
 
 Checker сопоставляет коммит реализации с SHA в `evidence/pr04/report.json`:
 после него могут меняться только evidence ПР04 и `AI_USAGE.md`.
-GitHub Actions не запускался, поскольку ветка не публиковалась.
+Во время локального выполнения ПР04 удалённый GitHub Actions не запускался.
 
 ## ПР03: первая нода, поза и команда
 
