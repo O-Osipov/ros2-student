@@ -1,0 +1,61 @@
+name: PR06 — Xacro, tf2 и QoS
+
+on:
+  push:
+    branches: [pr06]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  practice:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    container:
+      image: osrf/ros:lyrical-desktop-full@sha256:e6b1cb530b65588279681db53784e264ce5cf83f2cc33e689d27d6024d7f3ebe
+      options: --user 0
+    env:
+      ROS_DOMAIN_ID: '56'
+      ROS_AUTOMATIC_DISCOVERY_RANGE: LOCALHOST
+      QT_QPA_PLATFORM: offscreen
+      COURSE_KIT_URL: https://ros.lms.ci.nsu.ru/downloads/robotics-course-kit-v1-w09-8579e0afe96d.tar.gz
+      COURSE_KIT_SHA256: 8579e0afe96d76220735b6019cc38b1f3cac8c21e4aae8470785138a74a6c54a
+    steps:
+      - name: Подготовить Node.js для checkout в ROS-контейнере
+        shell: bash
+        run: |
+          set -euo pipefail
+          apt-get update
+          DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends nodejs
+          node -e 'if (Number(process.versions.node.split(".")[0]) < 20) process.exit(1)'
+      - name: Получить историю репозитория
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Проверить модель и живой tf2
+        shell: bash
+        run: |
+          set -eo pipefail
+          source /opt/ros/lyrical/setup.bash
+          colcon build --symlink-install --packages-select course_description
+          source install/setup.bash
+          xacro src/course_description/urdf/vehicle.urdf.xacro -o /tmp/pr06-vehicle.urdf
+          check_urdf /tmp/pr06-vehicle.urdf
+          colcon test --packages-select course_description
+          colcon test-result --verbose
+          python3 scripts/check_pr06.py
+      - name: Скачать и сверить course kit
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSLo course-kit.tar.gz "$COURSE_KIT_URL"
+          printf '%s  %s\n' "$COURSE_KIT_SHA256" course-kit.tar.gz | sha256sum -c -
+          mkdir -p .course-kit/pr06
+          tar -xzf course-kit.tar.gz -C .course-kit/pr06
+      - name: Проверить отчёт ПР06
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m json.tool evidence/pr06/report.json > /dev/null
+          python3 .course-kit/pr06/v1/tools/check_practice.py PR06 --submission .

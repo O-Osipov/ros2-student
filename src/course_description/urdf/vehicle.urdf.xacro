@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="course_ackermann">
+  <!-- SI units and REP-103: x forward, y left, z up. SDF supplies dimensions only. -->
+  <xacro:arg name="wheel_base" default="0.8"/>
+  <xacro:arg name="track_width" default="0.62"/>
+  <xacro:arg name="wheel_radius" default="0.12"/>
+  <xacro:property name="wheel_base" value="$(arg wheel_base)"/>
+  <xacro:property name="track_width" value="$(arg track_width)"/>
+  <xacro:property name="wheel_radius" value="$(arg wheel_radius)"/>
+  <xacro:property name="body_length" value="1.05"/>
+  <xacro:property name="body_width" value="0.52"/>
+  <xacro:property name="body_height" value="0.22"/>
+
+  <material name="body_blue"><color rgba="0.05 0.36 0.72 1"/></material>
+  <material name="wheel_black"><color rgba="0.04 0.04 0.04 1"/></material>
+
+  <link name="base_link">
+    <inertial>
+      <origin xyz="0 0 0.12"/>
+      <mass value="12.0"/>
+      <inertia ixx="0.55" ixy="0" ixz="0" iyy="1.10" iyz="0" izz="1.40"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0.12"/>
+      <geometry><box size="${body_length} ${body_width} ${body_height}"/></geometry>
+      <material name="body_blue"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.12"/>
+      <geometry><box size="${body_length} ${body_width} ${body_height}"/></geometry>
+    </collision>
+  </link>
+
+  <xacro:macro name="wheel" params="side longitudinal lateral">
+    <link name="${side}_wheel_link">
+      <inertial>
+        <mass value="0.8"/>
+        <inertia ixx="0.006" ixy="0" ixz="0" iyy="0.003" iyz="0" izz="0.006"/>
+      </inertial>
+      <visual>
+        <origin rpy="1.57079632679 0 0"/>
+        <geometry><cylinder radius="${wheel_radius}" length="0.07"/></geometry>
+        <material name="wheel_black"/>
+      </visual>
+      <collision>
+        <origin rpy="1.57079632679 0 0"/>
+        <geometry><cylinder radius="${wheel_radius}" length="0.07"/></geometry>
+      </collision>
+    </link>
+    <!-- Fixed for the mandatory static-tree exercise; no joint_states required. -->
+    <joint name="${side}_wheel_joint" type="fixed">
+      <parent link="base_link"/>
+      <child link="${side}_wheel_link"/>
+      <origin xyz="${longitudinal * wheel_base / 2} ${lateral * track_width / 2} 0"/>
+    </joint>
+  </xacro:macro>
+  <xacro:wheel side="front_left" longitudinal="1" lateral="1"/>
+  <xacro:wheel side="front_right" longitudinal="1" lateral="-1"/>
+  <xacro:wheel side="rear_left" longitudinal="-1" lateral="1"/>
+  <xacro:wheel side="rear_right" longitudinal="-1" lateral="-1"/>
+
+  <link name="camera_link">
+    <inertial><mass value="0.033333"/><inertia ixx="0.000333" ixy="0" ixz="0" iyy="0.000333" iyz="0" izz="0.000333"/></inertial>
+    <visual><geometry><box size="0.08 0.05 0.05"/></geometry><material name="body_blue"/></visual>
+    <collision><geometry><box size="0.08 0.05 0.05"/></geometry></collision>
+  </link>
+  <joint name="camera_joint" type="fixed">
+    <parent link="base_link"/><child link="camera_link"/>
+    <origin xyz="0.28 0 0.38"/>
+  </joint>
+
+  <link name="lidar_link">
+    <inertial><mass value="0.033333"/><inertia ixx="0.000333" ixy="0" ixz="0" iyy="0.000333" iyz="0" izz="0.000333"/></inertial>
+    <visual><geometry><cylinder radius="0.045" length="0.06"/></geometry><material name="body_blue"/></visual>
+    <collision><geometry><cylinder radius="0.045" length="0.06"/></geometry></collision>
+  </link>
+  <joint name="lidar_joint" type="fixed">
+    <parent link="base_link"/><child link="lidar_link"/>
+    <origin xyz="0.28 0 0.38"/>
+  </joint>
+
+  <link name="imu_link">
+    <inertial><mass value="0.033334"/><inertia ixx="0.000333" ixy="0" ixz="0" iyy="0.000333" iyz="0" izz="0.000333"/></inertial>
+    <visual><geometry><box size="0.04 0.04 0.02"/></geometry><material name="body_blue"/></visual>
+    <collision><geometry><box size="0.04 0.04 0.02"/></geometry></collision>
+  </link>
+  <joint name="imu_joint" type="fixed">
+    <parent link="base_link"/><child link="imu_link"/>
+    <origin xyz="0.28 0 0.38"/>
+  </joint>
+</robot>

@@ -1,4 +1,52 @@
-# ПР05. Launch, QoS и повтор записи
+# ПР06. Модель робота, tf2 и QoS преобразований
+
+Локальная ветка `pr06` создана от `pr05`: в GitVerse ветки `pr06` пока нет.
+Пакет [course_description](src/course_description/package.xml) содержит
+[Xacro-модель](src/course_description/urdf/vehicle.urdf.xacro),
+[launch](src/course_description/launch/description.launch.py),
+[RViz-конфигурацию](src/course_description/rviz/vehicle.rviz) и
+[структурные тесты](src/course_description/test/test_model.py).
+Размеры корпуса, базы, колеи, колёс и положение сенсоров взяты из SDF
+официального course kit `v1-w09`; плагины Gazebo в URDF не переносились.
+
+В ROS 2 Lyrical-контейнере с рабочей директорией `/work`:
+
+```bash
+source /opt/ros/lyrical/setup.bash
+export ROS_DOMAIN_ID=56 ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST
+colcon build --symlink-install --packages-select course_description
+source install/setup.bash
+xacro src/course_description/urdf/vehicle.urdf.xacro -o /tmp/pr06-vehicle.urdf
+check_urdf /tmp/pr06-vehicle.urdf
+colcon test --packages-select course_description
+colcon test-result --verbose
+python3 scripts/check_pr06.py
+```
+
+[Живой сценарий](scripts/check_pr06.py) запускает настоящий
+`robot_state_publisher`, проверяет позднюю подписку на `/tf_static`,
+`tf2_echo` и `view_frames`. Для сохранения свежих результатов используйте
+`--evidence-dir evidence/pr06` в свободном ROS-домене. Проверенный результат:
+`transient_local` получил семь фиксированных преобразований (exit 0),
+`volatile` не получил исторического сообщения (exit 124).
+Правильная структура и опыт с временно неправильным родителем лидара
+описаны в [frames.md](evidence/pr06/frames.md); сырые результаты находятся
+в [model-check.txt](evidence/pr06/model-check.txt),
+[tf-qos.txt](evidence/pr06/tf-qos.txt) и [defect.txt](evidence/pr06/defect.txt).
+
+Для RViz запустите `ros2 launch course_description description.launch.py
+rviz:=true` с `QT_QPA_PLATFORM=xcb` и доступным X-сервером. Конфигурация
+выбирает `Fixed Frame=base_link` и RobotModel из `/robot_description`.
+В данном контейнере запуск через X прошёл с программным OpenGL; визуальную
+картинку по терминальному логу подтвердить нельзя. Qt `offscreen` не
+создаёт нужное RViz окно GLX. Логи находятся в `evidence/pr06/rviz*.txt`.
+
+Публичный checker: `python3 .course-kit/pr06/v1/tools/check_practice.py
+PR06 --submission . --json`. Он сопоставляет `report.commit` с коммитом
+реализации; после него могут меняться только evidence ПР06 и `AI_USAGE.md`.
+Push ветки не выполнялся.
+
+## ПР05. Launch, QoS и повтор записи
 
 Ветка `pr05` создана от локальной `pr04`, поскольку преподавательской ветки
 `pr05` на GitVerse пока нет. Пакет [course_bringup](src/course_bringup/package.xml)
@@ -76,7 +124,7 @@ python3 .course-kit/pr05/v1/tools/check_practice.py PR05 --submission . --json
 
 Checker требует коммит реализации и его полный SHA в
 `evidence/pr05/report.json`, затем отдельный коммит evidence. Функциональные
-испытания проведены локально. Push ПР05 пока не выполнялся.
+испытания проведены локально. Позднее ветка ПР05 была отправлена в личный GitHub.
 
 ## ПР04: параметры ноды patrol
 
