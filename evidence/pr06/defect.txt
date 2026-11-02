@@ -1,0 +1,54 @@
+$ xacro src/course_description/urdf/vehicle.urdf.xacro -o /tmp/pr06-broken.urdf
+exit= 0
+
+$ check_urdf /tmp/pr06-broken.urdf
+exit= 0
+ robot name is: course_ackermann
+---------- Successfully Parsed XML ---------------
+root Link: base_link has 6 child(ren)
+    child(1):  camera_link
+        child(1):  lidar_link
+    child(2):  front_left_wheel_link
+    child(3):  front_right_wheel_link
+    child(4):  imu_link
+    child(5):  rear_left_wheel_link
+    child(6):  rear_right_wheel_link
+
+$ python3 -m pytest -q src/course_description/test/test_model.py -k tree_and_sensor
+exit= 1
+ F                                                                        [100%]
+=================================== FAILURES ===================================
+________________________ test_tree_and_sensor_placement ________________________
+
+    def test_tree_and_sensor_placement():
+        root = expanded()
+        links = {link.get('name') for link in root.findall('link')}
+        assert links == {'base_link', 'camera_link', 'lidar_link', 'imu_link',
+                         'front_left_wheel_link', 'front_right_wheel_link',
+                         'rear_left_wheel_link', 'rear_right_wheel_link'}
+        assert len(root.findall('joint')) == len(links) - 1
+        children = joints(root)
+        assert set(children) == links - {'base_link'}
+        for child in children:
+            seen = set()
+            current = child
+            while current != 'base_link':
+                assert current not in seen
+                seen.add(current)
+                current = children[current].find('parent').get('link')
+                assert current in links
+        for sensor in ('camera_link', 'lidar_link', 'imu_link'):
+            joint = children[sensor]
+>           assert joint.find('parent').get('link') == 'base_link', f'{sensor} must attach to base_link'
+E           AssertionError: lidar_link must attach to base_link
+E           assert 'camera_link' == 'base_link'
+E
+E             - base_link
+E             + camera_link
+
+src/course_description/test/test_model.py:39: AssertionError
+=========================== short test summary info ============================
+FAILED src/course_description/test/test_model.py::test_tree_and_sensor_placement
+1 failed, 1 deselected in 0.12s
+
+PASS: wrong lidar parent reproduced, source restored

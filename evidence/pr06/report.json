@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "practice_id": "PR06",
+  "commit": "ca004f493c156792bbdfea6e3196c5d180c7ed01",
+  "course_kit": {
+    "version": "v1-w09",
+    "archive_sha256": "8579e0afe96d76220735b6019cc38b1f3cac8c21e4aae8470785138a74a6c54a"
+  },
+  "commands": [
+    "xacro src/course_description/urdf/vehicle.urdf.xacro -o /tmp/pr06-vehicle.urdf",
+    "check_urdf /tmp/pr06-vehicle.urdf",
+    "colcon build --symlink-install --packages-select course_description",
+    "colcon test --packages-select course_description",
+    "python3 scripts/check_pr06.py --evidence-dir evidence/pr06",
+    "ros2 launch course_description description.launch.py rviz:=true"
+  ],
+  "tests": [
+    {"name": "Expanded Xacro, URDF, structure and dimensions", "status": "passed", "evidence": "evidence/pr06/model-check.txt: 2 passed"},
+    {"name": "Wrong lidar parent reproduced", "status": "passed", "evidence": "evidence/pr06/defect.txt: check_urdf accepts, expected-parent test fails"},
+    {"name": "Real /tf_static late QoS subscribers", "status": "passed", "evidence": "evidence/pr06/tf-qos.txt: transient_local exit 0, volatile exit 124"},
+    {"name": "tf2 tree and relation", "status": "passed", "evidence": "evidence/pr06/tf-tools.txt"},
+    {"name": "RViz GUI rendering", "status": "skipped", "evidence": "evidence/pr06/rviz-xcb.txt: process opened via X; visual display not inspected"}
+  ],
+  "defect": {
+    "reproducer": "Temporarily set lidar_joint parent to camera_link while retaining the 0.28 0 0.38 origin; check_urdf accepted the tree but test_tree_and_sensor_placement failed.",
+    "root_cause": "The same offset would be applied twice from base_link through camera_link, moving lidar_link to 0.56 0 0.76.",
+    "proof_after": "Restored parent base_link; check_urdf and two package tests passed, and tf2_echo measured 0.28 0 0.38."
+  },
+  "claims": {
+    "public_tests_passed": true,
+    "defect_reproduced": true,
+    "defect_fixed": true
+  },
+  "time": {
+    "contact_academic_hours": 0,
+    "self_study_hours": 0
+  },
+  "time_note": "Личное время студента не измерялось; заполнить перед сдачей.",
+  "ai_used": true,
+  "recorded_at": "2026-11-02",
+  "ci_note": "Локальные проверки пройдены; push и удалённого CI ПР06 ещё не было."
+}

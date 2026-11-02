@@ -1,0 +1,36 @@
+[INFO] [launch]: All log files can be found below /home/ubuntu/.ros/log/2026-11-02-14-49-31-328560-pr01-demo-1051
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [robot_state_publisher-1]: process started with pid [1056]
+[INFO] [rviz2-2]: process started with pid [1057]
+[robot_state_publisher-1] [WARN] [1793630971.486049604] [kdl_parser]: The root link base_link has an inertia specified in the URDF, but KDL does not support a root link with an inertia.  As a workaround, you can add an extra dummy link to your URDF.
+[robot_state_publisher-1] [INFO] [1793630971.486167441] [robot_state_publisher]: Robot initialized
+[rviz2-2] [ERROR] [1793630971.538803726] [rviz2]: Could not open file: /home/ubuntu/.rviz2/persistent_settings
+[rviz2-2] [INFO] [1793630972.687711232] [rviz2]: Stereo is NOT SUPPORTED
+[rviz2-2] [INFO] [1793630972.687785483] [rviz2]: OpenGl version: 4.5 (GLSL 4.5)
+[rviz2-2] [INFO] [1793630972.747950935] [rviz2]: Stereo is NOT SUPPORTED
+[rviz2-2] [ERROR] [1793630972.906503305] [rviz2]: Could not load pixmap package://rviz_common/icons/rotate.svg
+[rviz2-2] [ERROR] [1793630972.906625556] [rviz2]: Could not load pixmap package://rviz_common/icons/rotate.svg -- using default cursor instead.
+[rviz2-2] [ERROR] [1793630972.908040579] [rviz2]: Could not load pixmap package://rviz_common/icons/rotate_cam.svg
+[rviz2-2] [ERROR] [1793630972.908119991] [rviz2]: Could not load pixmap package://rviz_common/icons/rotate_cam.svg -- using default cursor instead.
+[rviz2-2] [ERROR] [1793630972.909706279] [rviz2]: Could not load pixmap package://rviz_common/icons/move2d.svg
+[rviz2-2] [ERROR] [1793630972.909779566] [rviz2]: Could not load pixmap package://rviz_common/icons/move2d.svg -- using default cursor instead.
+[rviz2-2] [ERROR] [1793630972.910415082] [rviz2]: Could not load pixmap package://rviz_common/icons/move_z.svg
+[rviz2-2] [ERROR] [1793630972.910448296] [rviz2]: Could not load pixmap package://rviz_common/icons/move_z.svg -- using default cursor instead.
+[rviz2-2] [ERROR] [1793630972.910951768] [rviz2]: Could not load pixmap package://rviz_common/icons/zoom.svg
+[rviz2-2] [ERROR] [1793630972.911005185] [rviz2]: Could not load pixmap package://rviz_common/icons/zoom.svg -- using default cursor instead.
+[rviz2-2] [ERROR] [1793630972.911526834] [rviz2]: Could not load pixmap package://rviz_common/icons/crosshair.svg
+[rviz2-2] [ERROR] [1793630972.911556875] [rviz2]: Could not load pixmap package://rviz_common/icons/crosshair.svg -- using default cursor instead.
+[rviz2-2] [ERROR] [1793630972.917541724] [rviz2]: Could not load pixmap package://rviz_default_plugins/icons/classes/FocusCamera.svg
+[rviz2-2] [ERROR] [1793630972.918901986] [rviz2]: Could not load pixmap package://rviz_default_plugins/icons/classes/Measure.svg
+[rviz2-2] [ERROR] [1793630972.920502055] [rviz2]: Could not load pixmap package://rviz_default_plugins/icons/classes/PublishPoint.svg
+[rviz2-2] [ERROR] [1793630972.924085272] [rviz2]: Could not load pixmap package://rviz_common/icons/cursor.svg
+[rviz2-2] [ERROR] [1793630972.950541069] [rviz2]: Could not load pixmap package://rviz_common/icons/classes/Displays.svg
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT) again, ignoring...
+[INFO] [rviz2-2]: sending signal 'SIGINT' to process[rviz2-2]
+[INFO] [robot_state_publisher-1]: sending signal 'SIGINT' to process[robot_state_publisher-1]
+[robot_state_publisher-1] [INFO] [1793630981.072936048] [rclcpp]: signal_handler(signum=2)
+[rviz2-2] [INFO] [1793630981.073704972] [rclcpp]: signal_handler(signum=2)
+[robot_state_publisher-1] [INFO] [1793630981.074634759] [rclcpp]: signal_handler(signum=2)
+[INFO] [rviz2-2]: process has finished cleanly [pid 1057]
+[INFO] [robot_state_publisher-1]: process has finished cleanly [pid 1056]

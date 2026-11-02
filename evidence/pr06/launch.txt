@@ -1,0 +1,10 @@
+[INFO] [launch]: All log files can be found below /home/ubuntu/.ros/log/2026-11-02-14-46-32-789780-pr01-demo-752
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [robot_state_publisher-1]: process started with pid [778]
+[robot_state_publisher-1] [WARN] [1793630792.995926709] [kdl_parser]: The root link base_link has an inertia specified in the URDF, but KDL does not support a root link with an inertia.  As a workaround, you can add an extra dummy link to your URDF.
+[robot_state_publisher-1] [INFO] [1793630792.996157195] [robot_state_publisher]: Robot initialized
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[robot_state_publisher-1] [INFO] [1793630812.671952268] [rclcpp]: signal_handler(signum=2)
+[INFO] [robot_state_publisher-1]: sending signal 'SIGINT' to process[robot_state_publisher-1]
+[robot_state_publisher-1] [INFO] [1793630812.675117585] [rclcpp]: signal_handler(signum=2)
+[INFO] [robot_state_publisher-1]: process has finished cleanly [pid 778]
