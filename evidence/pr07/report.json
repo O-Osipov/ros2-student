@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "practice_id": "PR07",
+  "commit": "79a2cf7b9ff8e4375781e05fba1a7c02e0deb664",
+  "course_kit": {
+    "version": "v1-w10",
+    "archive_sha256": "7a91d388d7bd3def7e058c8da48c32ff27ea6f14dc880a2da169c4102d456874"
+  },
+  "commands": [
+    "colcon build --symlink-install --packages-up-to course_simulation",
+    "gz sdf -k src/course_simulation/models/course_ackermann/model.sdf",
+    "colcon test --packages-select course_simulation",
+    "ros2 launch course_simulation simulation.launch.py headless:=true",
+    "ros2 run course_simulation command_probe --speed 0.4 --steering 0.2 --seconds 6",
+    "python3 scripts/check_pr07_runtime.py --seconds 15",
+    "python3 scripts/record_pr07.py --sim-seconds 35",
+    "ros2 bag info fixtures/pr07-sensors",
+    "ros2 launch course_simulation simulation.launch.py headless:=true bridge_config:=/work/evidence/pr07/bridge-bad.yaml"
+  ],
+  "tests": [
+    {
+      "name": "SDF validation and workspace build",
+      "status": "passed",
+      "evidence": "evidence/pr07/experiment.md"
+    },
+    {
+      "name": "Adapter package tests",
+      "status": "passed",
+      "evidence": "36 tests, 0 errors, 0 failures, 1 skipped"
+    },
+    {
+      "name": "Headless clock, sensors, frames and QoS",
+      "status": "passed",
+      "evidence": "evidence/pr07/sensors.json; bridge-info.txt"
+    },
+    {
+      "name": "Safe command through bridge, odometry and body motion",
+      "status": "passed",
+      "evidence": "evidence/pr07/safe-command.txt; ros-command.txt; gz-command.txt; physical-motion.json"
+    },
+    {
+      "name": "IMU bridge defect and recovery",
+      "status": "passed",
+      "evidence": "evidence/pr07/defect.md"
+    },
+    {
+      "name": "MCAP with seven topics and 33.366s simulation duration",
+      "status": "passed",
+      "evidence": "evidence/pr07/bag-info.txt"
+    },
+    {
+      "name": "Clean ros_gz_bridge exit on SIGINT",
+      "status": "failed",
+      "evidence": "evidence/pr07/headless-shutdown-check.txt: intermittent vendor process exit -11"
+    }
+  ],
+  "defect": {
+    "reproducer": "Run simulation.launch.py with evidence/pr07/bridge-bad.yaml, where Gazebo IMU topic is /vehicle/imu_wrong. ROS still reports one bridge publisher, while echo times out; Gazebo /vehicle/imu publishes.",
+    "root_cause": "The bridge subscribes to a non-existent Gazebo topic despite the correct ROS publisher endpoint being created.",
+    "proof_after": "Restart the same launch with src/course_simulation/config/bridge.yaml and one bridge. /vehicle/imu produces an Imu message with frame_id imu_link."
+  },
+  "claims": {
+    "public_tests_passed": true,
+    "defect_reproduced": true,
+    "defect_fixed": true,
+    "headless_verified": true,
+    "recording_verified": true,
+    "odometry_tf_owned": true
+  },
+  "time": {
+    "contact_academic_hours": 0,
+    "self_study_hours": 0
+  },
+  "time_note": "Личное время студента не измерялось; заполнить перед сдачей.",
+  "ai_used": true,
+  "recorded_at": "2026-11-09",
+  "submission_note": "Коммит реализации указан в report.commit; evidence оформляется следующим локальным коммитом. Push и удалённый CI пока не выполнялись."
+}

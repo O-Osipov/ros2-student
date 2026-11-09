@@ -1,0 +1,10 @@
+exit=124 (bounded after 8s)
+WARNING: topic [/vehicle/scan] does not appear to be published yet
+average rate: 6.776
+	min: 0.134s max: 0.170s std dev: 0.01201s window: 5
+average rate: 6.855
+	min: 0.121s max: 0.170s std dev: 0.01485s window: 12
+average rate: 6.943
+	min: 0.121s max: 0.170s std dev: 0.01536s window: 19
+average rate: 6.903
+	min: 0.109s max: 0.221s std dev: 0.02159s window: 26

@@ -1,0 +1,8 @@
+exit=124 (bounded after 8s)
+WARNING: topic [/vehicle/camera/image_raw] does not appear to be published yet
+average rate: 4.387
+	min: 0.100s max: 0.296s std dev: 0.09024s window: 3
+average rate: 3.613
+	min: 0.100s max: 0.346s std dev: 0.08102s window: 6
+average rate: 3.223
+	min: 0.100s max: 0.529s std dev: 0.11526s window: 9

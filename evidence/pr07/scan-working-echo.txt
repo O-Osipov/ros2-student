@@ -1,0 +1,6 @@
+exit=0
+stamp:
+  sec: 27
+  nanosec: 600000000
+frame_id: lidar_link
+---

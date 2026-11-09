@@ -1,0 +1,130 @@
+exit=0
+header {
+  stamp {
+    sec: 23
+    nsec: 509000000
+  }
+  data {
+    key: "frame_id"
+    value: "imu_link"
+  }
+  data {
+    key: "seq"
+    value: "0"
+  }
+}
+entity_name: "course_ackermann::imu_link::imu"
+orientation {
+  x: 3.9606956874367251e-10
+  y: 1.0018640338592e-10
+  z: -1.8623574172085996e-13
+  w: 1
+}
+orientation_covariance {
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+}
+angular_velocity {
+  x: 1.963932636823e-13
+  y: -1.0625146535236823e-12
+  z: 1.0141851803648e-18
+}
+angular_velocity_covariance {
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+}
+linear_acceleration {
+  x: -3.3754734205938947e-09
+  y: 7.154459955630506e-09
+  z: 9.8100000002768581
+}
+linear_acceleration_covariance {
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+}
+
+header {
+  stamp {
+    sec: 23
+    nsec: 510000000
+  }
+  data {
+    key: "frame_id"
+    value: "imu_link"
+  }
+  data {
+    key: "seq"
+    value: "1"
+  }
+}
+entity_name: "course_ackermann::imu_link::imu"
+orientation {
+  x: 3.9607034568721146e-10
+  y: 1.0018621354809096e-10
+  z: -1.8623574202500141e-13
+  w: 1
+}
+orientation_covariance {
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+}
+angular_velocity {
+  x: 1.5538870779013975e-12
+  y: -3.7967565810702529e-13
+  z: -6.07976821571965e-19
+}
+angular_velocity_covariance {
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+}
+linear_acceleration {
+  x: -1.6242619706966751e-09
+  y: 7.0921526566299591e-09
+  z: 9.8100000001668839
+}
+linear_acceleration_covariance {
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+  data: 0
+}

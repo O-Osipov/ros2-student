@@ -1,0 +1,87 @@
+[INFO] [launch]: All log files can be found below /home/ubuntu/.ros/log/2026-11-09-12-05-44-574184-pr01-demo-11297
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [gz-1]: process started with pid [11303]
+[INFO] [robot_state_publisher-2]: process started with pid [11304]
+[INFO] [parameter_bridge-3]: process started with pid [11305]
+[INFO] [drive_adapter-4]: process started with pid [11306]
+[INFO] [odom_adapter-5]: process started with pid [11307]
+[robot_state_publisher-2] [WARN] [1794225945.154789388] [kdl_parser]: The root link base_link has an inertia specified in the URDF, but KDL does not support a root link with an inertia.  As a workaround, you can add an extra dummy link to your URDF.
+[robot_state_publisher-2] [INFO] [1794225945.155077891] [simulation.robot_state_publisher]: Robot initialized
+[gz-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="course_ackermann"]/link[@name="camera_link"]/sensor[@name="front_camera"]/gz_frame_id:/work/install/course_simulation/share/course_simulation/models/course_ackermann/model.sdf:L88]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[gz-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="course_ackermann"]/link[@name="lidar_link"]/sensor[@name="lidar"]/gz_frame_id:/work/install/course_simulation/share/course_simulation/models/course_ackermann/model.sdf:L100]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[gz-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="course_ackermann"]/link[@name="imu_link"]/sensor[@name="imu"]/gz_frame_id:/work/install/course_simulation/share/course_simulation/models/course_ackermann/model.sdf:L110]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[parameter_bridge-3] [INFO] [1794225946.171549335] [simulation.bridge]: Creating ROS->GZ Bridge: [/vehicle/gz_cmd_vel (geometry_msgs/msg/Twist) -> /model/course_ackermann/cmd_vel (gz.msgs.Twist)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1794225946.187442647] [simulation.bridge]: Creating GZ->ROS Bridge: [/model/course_ackermann/odometry (gz.msgs.Odometry) -> /vehicle/odom_gz (nav_msgs/msg/Odometry)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1794225946.207058716] [simulation.bridge]: Creating GZ->ROS Bridge: [/vehicle/scan (gz.msgs.LaserScan) -> /vehicle/scan (sensor_msgs/msg/LaserScan)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1794225946.219097558] [simulation.bridge]: Creating GZ->ROS Bridge: [/vehicle/imu (gz.msgs.IMU) -> /vehicle/imu (sensor_msgs/msg/Imu)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1794225946.220216215] [simulation.bridge]: Creating GZ->ROS Bridge: [/vehicle/camera/image_raw (gz.msgs.Image) -> /vehicle/camera/image_raw (sensor_msgs/msg/Image)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1794225946.221554987] [simulation.bridge]: Creating GZ->ROS Bridge: [/clock (gz.msgs.Clock) -> /clock (rosgraph_msgs/msg/Clock)] (Lazy 0)
+[gz-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="course_ackermann"]/link[@name="camera_link"]/sensor[@name="front_camera"]/gz_frame_id:/work/install/course_simulation/share/course_simulation/models/course_ackermann/model.sdf:L88]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[gz-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="course_ackermann"]/link[@name="lidar_link"]/sensor[@name="lidar"]/gz_frame_id:/work/install/course_simulation/share/course_simulation/models/course_ackermann/model.sdf:L100]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[gz-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="course_ackermann"]/link[@name="imu_link"]/sensor[@name="imu"]/gz_frame_id:/work/install/course_simulation/share/course_simulation/models/course_ackermann/model.sdf:L110]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[gz-1] libEGL warning: Not allowed to force software rendering when API explicitly selects a hardware device.
+[gz-1] libEGL warning: Not allowed to force software rendering when API explicitly selects a hardware device.
+[parameter_bridge-3] [INFO] [1794226111.782719872] [simulation.bridge]: Passing message from ROS geometry_msgs/msg/Twist to Gazebo gz.msgs.Twist (showing msg only once per type)
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[INFO] [odom_adapter-5]: sending signal 'SIGINT' to process[odom_adapter-5]
+[INFO] [drive_adapter-4]: sending signal 'SIGINT' to process[drive_adapter-4]
+[INFO] [parameter_bridge-3]: sending signal 'SIGINT' to process[parameter_bridge-3]
+[INFO] [robot_state_publisher-2]: sending signal 'SIGINT' to process[robot_state_publisher-2]
+[INFO] [gz-1]: sending signal 'SIGINT' to process[gz-1]
+[parameter_bridge-3] [INFO] [1794226518.754130226] [rclcpp]: signal_handler(signum=2)
+[robot_state_publisher-2] [INFO] [1794226518.760824503] [rclcpp]: signal_handler(signum=2)
+[INFO] [parameter_bridge-3]: process has finished cleanly [pid 11305]
+[drive_adapter-4] Traceback (most recent call last):
+[drive_adapter-4]   File "/work/install/course_simulation/lib/course_simulation/drive_adapter", line 33, in <module>
+[drive_adapter-4]     sys.exit(load_entry_point('course-simulation', 'console_scripts', 'drive_adapter')())
+[drive_adapter-4]              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+[drive_adapter-4]   File "/work/build/course_simulation/course_simulation/drive_adapter.py", line 57, in main
+[drive_adapter-4]     rclpy.spin(node)
+[drive_adapter-4]     ~~~~~~~~~~^^^^^^
+[drive_adapter-4]   File "/opt/ros/lyrical/lib/python3.14/site-packages/rclpy/__init__.py", line 324, in spin
+[drive_adapter-4]     executor.spin_once()
+[drive_adapter-4]     ~~~~~~~~~~~~~~~~~~^^
+[drive_adapter-4]   File "/opt/ros/lyrical/lib/python3.14/site-packages/rclpy/executors.py", line 1033, in spin_once
+[drive_adapter-4]     self._spin_once_impl(timeout_sec)
+[drive_adapter-4]     ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+[drive_adapter-4]   File "/opt/ros/lyrical/lib/python3.14/site-packages/rclpy/executors.py", line 1013, in _spin_once_impl
+[drive_adapter-4]     handler, entity, node = self.wait_for_ready_callbacks(
+[drive_adapter-4]                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+[drive_adapter-4]         timeout_sec, None, wait_condition)
+[drive_adapter-4]         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[drive_adapter-4]   File "/opt/ros/lyrical/lib/python3.14/site-packages/rclpy/executors.py", line 983, in wait_for_ready_callbacks
+[drive_adapter-4]     return next(self._cb_iter)
+[drive_adapter-4]   File "/opt/ros/lyrical/lib/python3.14/site-packages/rclpy/executors.py", line 926, in _wait_for_ready_callbacks
+[drive_adapter-4]     if sub.callback_group.can_execute(sub):
+[drive_adapter-4]        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+[drive_adapter-4]   File "/opt/ros/lyrical/lib/python3.14/site-packages/rclpy/callback_groups.py", line 114, in can_execute
+[drive_adapter-4]     assert weakref.ref(entity) in self.entities
+[drive_adapter-4]            ~~~~~~~~~~~^^^^^^^^
+[drive_adapter-4] KeyboardInterrupt
+[odom_adapter-5] Traceback (most recent call last):
+[odom_adapter-5]   File "/work/install/course_simulation/lib/course_simulation/odom_adapter", line 33, in <module>
+[odom_adapter-5]     sys.exit(load_entry_point('course-simulation', 'console_scripts', 'odom_adapter')())
+[odom_adapter-5]              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+[odom_adapter-5]   File "/work/build/course_simulation/course_simulation/odom_adapter.py", line 68, in main
+[odom_adapter-5]     rclpy.spin(node)
+[odom_adapter-5]     ~~~~~~~~~~^^^^^^
+[odom_adapter-5]   File "/opt/ros/lyrical/lib/python3.14/site-packages/rclpy/__init__.py", line 324, in spin
+[odom_adapter-5]     executor.spin_once()
+[odom_adapter-5]     ~~~~~~~~~~~~~~~~~~^^
+[odom_adapter-5]   File "/opt/ros/lyrical/lib/python3.14/site-packages/rclpy/executors.py", line 1033, in spin_once
+[odom_adapter-5]     self._spin_once_impl(timeout_sec)
+[odom_adapter-5]     ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+[odom_adapter-5]   File "/opt/ros/lyrical/lib/python3.14/site-packages/rclpy/executors.py", line 1013, in _spin_once_impl
+[odom_adapter-5]     handler, entity, node = self.wait_for_ready_callbacks(
+[odom_adapter-5]                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+[odom_adapter-5]         timeout_sec, None, wait_condition)
+[odom_adapter-5]         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[odom_adapter-5]   File "/opt/ros/lyrical/lib/python3.14/site-packages/rclpy/executors.py", line 983, in wait_for_ready_callbacks
+[odom_adapter-5]     return next(self._cb_iter)
+[odom_adapter-5]   File "/opt/ros/lyrical/lib/python3.14/site-packages/rclpy/executors.py", line 894, in _wait_for_ready_callbacks
+[odom_adapter-5]     timers_ready = wait_set.get_ready_entities('timer')
+[odom_adapter-5] KeyboardInterrupt
+[INFO] [robot_state_publisher-2]: process has finished cleanly [pid 11304]
+[ERROR] [drive_adapter-4]: process has died [pid 11306, exit code -2, cmd '/work/install/course_simulation/lib/course_simulation/drive_adapter --ros-args -r __ns:=/simulation --params-file /tmp/launch_params_msigdas5'].
+[INFO] [gz-1]: process has finished cleanly [pid 11303]
+[ERROR] [odom_adapter-5]: process has died [pid 11307, exit code -2, cmd '/work/install/course_simulation/lib/course_simulation/odom_adapter --ros-args -r __ns:=/simulation --params-file /tmp/launch_params_r6043aub -r tf:=/tf -r tf_static:=/tf_static'].

@@ -1,0 +1,11 @@
+--- bridge.yaml
++++ bridge-bad.yaml
+@@ -15,7 +15,7 @@
+   qos_profile: SENSOR_DATA
+   direction: GZ_TO_ROS
+ - ros_topic_name: /vehicle/imu
+-  gz_topic_name: /vehicle/imu
++  gz_topic_name: /vehicle/imu_wrong
+   ros_type_name: sensor_msgs/msg/Imu
+   gz_type_name: gz.msgs.IMU
+   qos_profile: SENSOR_DATA

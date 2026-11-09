@@ -1,0 +1,38 @@
+
+== Система ==
+PRETTY_NAME="Ubuntu 26.04.1 LTS"
+VERSION_CODENAME=resolute
+архитектура=x86_64
+ядро=6.18.33.2-microsoft-standard-WSL2
+назначенная оболочка=/bin/bash
+текущая оболочка=bash
+
+== Инструменты ==
+GNU bash, version 5.3.9(1)-release (x86_64-pc-linux-gnu)
+Copyright (C) 2025 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+git version 2.53.0
+[не найдено] fish
+[не найдено] uv
+[не найдено] code
+[не найдено] docker
+
+== ROS 2 ==
+ROS_DISTRO=lyrical
+ROS_DOMAIN_ID=57
+ros2=/opt/ros/lyrical/bin/ros2
+/opt/ros/lyrical
+
+== Графические адаптеры и драйверы ==
+[не найдено] lspci; установите pciutils
+
+== OpenGL renderer ==
+[не найдено] glxinfo; установите mesa-utils
+
+== Vulkan ==
+[не найдено] vulkaninfo; установите vulkan-tools
+
+== NVIDIA ==
+[не найдено] nvidia-smi; это нормально для Intel/AMD-only системы
+
+Отчёт завершён. Перед публикацией просмотрите его вручную.

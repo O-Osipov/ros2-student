@@ -1,0 +1,5 @@
+exit=0
+clock:
+  sec: 25
+  nanosec: 149000000
+---

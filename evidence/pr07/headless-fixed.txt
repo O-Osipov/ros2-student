@@ -1,0 +1,58 @@
+[INFO] [launch]: All log files can be found below /home/ubuntu/.ros/log/2026-11-09-12-18-28-058977-pr01-demo-12663
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [gz-1]: process started with pid [12669]
+[INFO] [robot_state_publisher-2]: process started with pid [12670]
+[INFO] [parameter_bridge-3]: process started with pid [12671]
+[INFO] [drive_adapter-4]: process started with pid [12672]
+[INFO] [odom_adapter-5]: process started with pid [12673]
+[robot_state_publisher-2] [WARN] [1794226708.674388591] [kdl_parser]: The root link base_link has an inertia specified in the URDF, but KDL does not support a root link with an inertia.  As a workaround, you can add an extra dummy link to your URDF.
+[robot_state_publisher-2] [INFO] [1794226708.674578198] [simulation.robot_state_publisher]: Robot initialized
+[gz-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="course_ackermann"]/link[@name="camera_link"]/sensor[@name="front_camera"]/gz_frame_id:/work/install/course_simulation/share/course_simulation/models/course_ackermann/model.sdf:L88]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[gz-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="course_ackermann"]/link[@name="lidar_link"]/sensor[@name="lidar"]/gz_frame_id:/work/install/course_simulation/share/course_simulation/models/course_ackermann/model.sdf:L100]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[gz-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="course_ackermann"]/link[@name="imu_link"]/sensor[@name="imu"]/gz_frame_id:/work/install/course_simulation/share/course_simulation/models/course_ackermann/model.sdf:L110]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[parameter_bridge-3] [INFO] [1794226710.020340509] [simulation.bridge]: Creating ROS->GZ Bridge: [/vehicle/gz_cmd_vel (geometry_msgs/msg/Twist) -> /model/course_ackermann/cmd_vel (gz.msgs.Twist)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1794226710.028421419] [simulation.bridge]: Creating GZ->ROS Bridge: [/model/course_ackermann/odometry (gz.msgs.Odometry) -> /vehicle/odom_gz (nav_msgs/msg/Odometry)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1794226710.035887526] [simulation.bridge]: Creating GZ->ROS Bridge: [/vehicle/scan (gz.msgs.LaserScan) -> /vehicle/scan (sensor_msgs/msg/LaserScan)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1794226710.044075706] [simulation.bridge]: Creating GZ->ROS Bridge: [/vehicle/imu (gz.msgs.IMU) -> /vehicle/imu (sensor_msgs/msg/Imu)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1794226710.048944140] [simulation.bridge]: Creating GZ->ROS Bridge: [/vehicle/camera/image_raw (gz.msgs.Image) -> /vehicle/camera/image_raw (sensor_msgs/msg/Image)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1794226710.052386332] [simulation.bridge]: Creating GZ->ROS Bridge: [/clock (gz.msgs.Clock) -> /clock (rosgraph_msgs/msg/Clock)] (Lazy 0)
+[gz-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="course_ackermann"]/link[@name="camera_link"]/sensor[@name="front_camera"]/gz_frame_id:/work/install/course_simulation/share/course_simulation/models/course_ackermann/model.sdf:L88]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[gz-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="course_ackermann"]/link[@name="lidar_link"]/sensor[@name="lidar"]/gz_frame_id:/work/install/course_simulation/share/course_simulation/models/course_ackermann/model.sdf:L100]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[gz-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="course_ackermann"]/link[@name="imu_link"]/sensor[@name="imu"]/gz_frame_id:/work/install/course_simulation/share/course_simulation/models/course_ackermann/model.sdf:L110]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[gz-1] libEGL warning: Not allowed to force software rendering when API explicitly selects a hardware device.
+[gz-1] libEGL warning: Not allowed to force software rendering when API explicitly selects a hardware device.
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[INFO] [odom_adapter-5]: sending signal 'SIGINT' to process[odom_adapter-5]
+[INFO] [drive_adapter-4]: sending signal 'SIGINT' to process[drive_adapter-4]
+[INFO] [parameter_bridge-3]: sending signal 'SIGINT' to process[parameter_bridge-3]
+[INFO] [robot_state_publisher-2]: sending signal 'SIGINT' to process[robot_state_publisher-2]
+[INFO] [gz-1]: sending signal 'SIGINT' to process[gz-1]
+[parameter_bridge-3] [INFO] [1794226795.041395303] [rclcpp]: signal_handler(signum=2)
+[robot_state_publisher-2] [INFO] [1794226795.052639179] [rclcpp]: signal_handler(signum=2)
+[INFO] [parameter_bridge-3]: process has finished cleanly [pid 12671]
+[odom_adapter-5] Traceback (most recent call last):
+[odom_adapter-5]   File "/work/install/course_simulation/lib/course_simulation/odom_adapter", line 33, in <module>
+[odom_adapter-5]     sys.exit(load_entry_point('course-simulation', 'console_scripts', 'odom_adapter')())
+[odom_adapter-5]              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+[odom_adapter-5]   File "/work/build/course_simulation/course_simulation/odom_adapter.py", line 68, in main
+[odom_adapter-5]     rclpy.spin(node)
+[odom_adapter-5]     ~~~~~~~~~~^^^^^^
+[odom_adapter-5]   File "/opt/ros/lyrical/lib/python3.14/site-packages/rclpy/__init__.py", line 324, in spin
+[odom_adapter-5]     executor.spin_once()
+[odom_adapter-5]     ~~~~~~~~~~~~~~~~~~^^
+[odom_adapter-5]   File "/opt/ros/lyrical/lib/python3.14/site-packages/rclpy/executors.py", line 1033, in spin_once
+[odom_adapter-5]     self._spin_once_impl(timeout_sec)
+[odom_adapter-5]     ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+[odom_adapter-5]   File "/opt/ros/lyrical/lib/python3.14/site-packages/rclpy/executors.py", line 1025, in _spin_once_impl
+[odom_adapter-5]     raise exception
+[odom_adapter-5]   File "/opt/ros/lyrical/lib/python3.14/site-packages/rclpy/task.py", line 351, in _execute_coroutine_step
+[odom_adapter-5]     result = coro.send(None)
+[odom_adapter-5]   File "/opt/ros/lyrical/lib/python3.14/site-packages/rclpy/executors.py", line 675, in handler
+[odom_adapter-5]     call_coroutine = take_from_wait_list(entity)
+[odom_adapter-5]   File "/opt/ros/lyrical/lib/python3.14/site-packages/rclpy/executors.py", line 553, in _take_subscription
+[odom_adapter-5]     msg_info = sub.handle.take_message(sub.msg_type, sub.raw)
+[odom_adapter-5] RuntimeError: Unable to convert call argument '0' to Python object (#define PYBIND11_DETAILED_ERROR_MESSAGES or compile in debug mode for details)
+[INFO] [robot_state_publisher-2]: process has finished cleanly [pid 12670]
+[INFO] [gz-1]: process has finished cleanly [pid 12669]
+[INFO] [drive_adapter-4]: process has finished cleanly [pid 12672]
+[ERROR] [odom_adapter-5]: process has died [pid 12673, exit code 1, cmd '/work/install/course_simulation/lib/course_simulation/odom_adapter --ros-args -r __ns:=/simulation --params-file /tmp/launch_params_ty34ftc_ -r tf:=/tf -r tf_static:=/tf_static'].

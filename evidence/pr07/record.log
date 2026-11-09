@@ -1,0 +1,23 @@
+stdin is not a terminal device. Keyboard handling disabled.[INFO] [1794226408.831904924] [rosbag2_recorder]: Press SPACE for pausing/resuming
+[INFO] [1794226408.831931256] [rosbag2_recorder]: Event publisher thread: Started
+[INFO] [1794226408.869478322] [rosbag2_recorder]: Starting recording to 'fixtures/pr07-sensors'
+[WARN] [1794226408.869597598] [rosbag2_recorder]: No input serialization format specified, using default rmw serialization format: 'cdr'.
+[INFO] [1794226408.873734887] [rosbag2_recorder]: Listening for topics...
+[INFO] [1794226408.873892336] [rosbag2_recorder]: Recording...
+[INFO] [1794226408.873799513] [rosbag2_recorder]: Topics discovery started.
+[INFO] [1794226408.874374795] [rosbag2_recorder]: use_sim_time set, waiting for /clock before starting recording...
+[INFO] [1794226410.993138538] [rosbag2_recorder]: Sim time /clock found, starting recording.
+[INFO] [1794226411.005942368] [rosbag2_recorder]: Subscribed to topic '/clock'
+[INFO] [1794226411.045292177] [rosbag2_recorder]: Subscribed to topic '/tf'
+[INFO] [1794226411.052077605] [rosbag2_recorder]: Subscribed to topic '/vehicle/camera/image_raw'
+[INFO] [1794226411.053039052] [rosbag2_recorder]: Overriding subscription profile for /tf_static
+[INFO] [1794226411.055607500] [rosbag2_recorder]: Subscribed to topic '/tf_static'
+[INFO] [1794226411.057943910] [rosbag2_recorder]: Subscribed to topic '/vehicle/imu'
+[INFO] [1794226411.067203689] [rosbag2_recorder]: Subscribed to topic '/vehicle/scan'
+[INFO] [1794226411.897903821] [rosbag2_recorder]: Subscribed to topic '/vehicle/odom'
+[INFO] [1794226411.898066789] [rosbag2_recorder]: All requested topics are subscribed. Stopping discovery...
+[INFO] [1794226411.898075301] [rosbag2_recorder]: Topics discovery stopped.
+[INFO] [1794226477.174070486] [rosbag2_cpp]: Writing remaining messages from cache to the bag. It may take a while
+[INFO] [1794226477.191143461] [rosbag2_recorder]: Recording stopped
+[WARN] [1794226477.191231356] [rosbag2_recorder]: Number of messages lost on the transport layer: 26
+[INFO] [1794226477.199593472] [rosbag2_recorder]: Event publisher thread: Exited

@@ -1,0 +1,6 @@
+exit=0
+stamp:
+  sec: 23
+  nanosec: 260000000
+frame_id: imu_link
+---

@@ -1,0 +1,116 @@
+{
+  "measurement_wall_seconds": 15.031,
+  "clock": {
+    "messages": 6555,
+    "first_ns": 25751000000,
+    "last_ns": 32754000000,
+    "real_time_factor": 0.466
+  },
+  "sensors": {
+    "/vehicle/camera/image_raw": {
+      "type": "sensor_msgs/msg/Image",
+      "frame_ids": [
+        "camera_link"
+      ],
+      "expected_frame_id": "camera_link",
+      "stamp_source": "simulation /clock",
+      "declared_hz": 15,
+      "measured_hz_sim": 9.86,
+      "measured_hz_wall": 4.52,
+      "messages": 68,
+      "first_stamp_ns": 25873000000,
+      "last_stamp_ns": 32671000000
+    },
+    "/vehicle/scan": {
+      "type": "sensor_msgs/msg/LaserScan",
+      "frame_ids": [
+        "lidar_link"
+      ],
+      "expected_frame_id": "lidar_link",
+      "stamp_source": "simulation /clock",
+      "declared_hz": 10,
+      "measured_hz_sim": 10.0,
+      "measured_hz_wall": 4.66,
+      "messages": 70,
+      "first_stamp_ns": 25800000000,
+      "last_stamp_ns": 32700000000
+    },
+    "/vehicle/imu": {
+      "type": "sensor_msgs/msg/Imu",
+      "frame_ids": [
+        "imu_link"
+      ],
+      "expected_frame_id": "imu_link",
+      "stamp_source": "simulation /clock",
+      "declared_hz": 100,
+      "measured_hz_sim": 100.0,
+      "measured_hz_wall": 46.64,
+      "messages": 701,
+      "first_stamp_ns": 25750000000,
+      "last_stamp_ns": 32750000000
+    },
+    "/vehicle/odom": {
+      "type": "nav_msgs/msg/Odometry",
+      "frame_ids": [
+        "base_link",
+        "odom"
+      ],
+      "expected_frame_id": "odom",
+      "stamp_source": "simulation /clock",
+      "declared_hz": 50,
+      "measured_hz_sim": 50.0,
+      "measured_hz_wall": 26.35,
+      "messages": 396,
+      "first_stamp_ns": 24836000000,
+      "last_stamp_ns": 32736000000
+    }
+  },
+  "gazebo_odom_frames": [
+    [
+      "course_ackermann/odom",
+      "course_ackermann/base_link"
+    ]
+  ],
+  "dynamic_tf_frames": [
+    [
+      "odom",
+      "base_link"
+    ]
+  ],
+  "static_tf_frames": [
+    [
+      "base_link",
+      "camera_link"
+    ],
+    [
+      "base_link",
+      "front_left_wheel_link"
+    ],
+    [
+      "base_link",
+      "front_right_wheel_link"
+    ],
+    [
+      "base_link",
+      "imu_link"
+    ],
+    [
+      "base_link",
+      "lidar_link"
+    ],
+    [
+      "base_link",
+      "rear_left_wheel_link"
+    ],
+    [
+      "base_link",
+      "rear_right_wheel_link"
+    ]
+  ],
+  "course_kit": {
+    "version": "v1-w10",
+    "archive_sha256": "7a91d388d7bd3def7e058c8da48c32ff27ea6f14dc880a2da169c4102d456874"
+  },
+  "changed_sensor_parameter": "camera update_rate: 20 -> 15 Hz",
+  "note": "Measured simulation rates are calculated from header stamps; wall rates reflect real-time factor and rendering load."
+}

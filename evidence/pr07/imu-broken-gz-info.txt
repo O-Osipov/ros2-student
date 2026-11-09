@@ -1,0 +1,4 @@
+exit=0
+Publishers [Address, Message Type]:
+  tcp://172.17.0.2:45937, gz.msgs.IMU
+No subscribers on topic [/vehicle/imu]
