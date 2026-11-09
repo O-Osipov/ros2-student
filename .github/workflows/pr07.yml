@@ -1,0 +1,74 @@
+name: PR07 — Gazebo bridge and adapters
+
+on:
+  push:
+    branches: [pr07]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  practice:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    container:
+      image: osrf/ros:lyrical-desktop-full@sha256:e6b1cb530b65588279681db53784e264ce5cf83f2cc33e689d27d6024d7f3ebe
+      options: --user 0
+    env:
+      ROS_DOMAIN_ID: '57'
+      ROS_AUTOMATIC_DISCOVERY_RANGE: LOCALHOST
+      COURSE_KIT_URL: https://ros.lms.ci.nsu.ru/downloads/robotics-course-kit-v1-w10-7a91d388d7bd.tar.gz
+      COURSE_KIT_SHA256: 7a91d388d7bd3def7e058c8da48c32ff27ea6f14dc880a2da169c4102d456874
+    steps:
+      - name: Prepare Node.js for checkout
+        shell: bash
+        run: |
+          set -euo pipefail
+          apt-get update
+          DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends nodejs
+          node -e 'if (Number(process.versions.node.split(".")[0]) < 20) process.exit(1)'
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install simulation dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          apt-get update
+          # The image includes Java; it is unrelated to PR07 and its mirror can lag.
+          apt-mark hold openjdk-25-jdk-headless openjdk-25-jdk openjdk-25-jre openjdk-25-jre-headless
+          DEBIAN_FRONTEND=noninteractive apt-get upgrade -y --with-new-pkgs
+          DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+            ros-lyrical-ackermann-msgs ros-lyrical-ros-gz
+      - name: Verify package and public tests
+        shell: bash
+        run: |
+          set -eo pipefail
+          source /opt/ros/lyrical/setup.bash
+          python3 - <<'PY'
+          from ackermann_msgs.msg import AckermannDriveStamped
+          from rclpy.serialization import serialize_message
+          serialize_message(AckermannDriveStamped())
+          PY
+          colcon build --symlink-install --packages-up-to course_simulation
+          source install/setup.bash
+          export GZ_SIM_RESOURCE_PATH="$PWD/src/course_simulation/models${GZ_SIM_RESOURCE_PATH:+:$GZ_SIM_RESOURCE_PATH}"
+          gz sdf -k src/course_simulation/models/course_ackermann/model.sdf
+          colcon test --packages-select course_simulation
+          colcon test-result --verbose
+      - name: Download and verify course kit
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSLo course-kit.tar.gz "$COURSE_KIT_URL"
+          printf '%s  %s\n' "$COURSE_KIT_SHA256" course-kit.tar.gz | sha256sum -c -
+          mkdir -p .course-kit/pr07
+          tar -xzf course-kit.tar.gz -C .course-kit/pr07
+      - name: Validate PR07 report
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m json.tool evidence/pr07/report.json >/dev/null
+          python3 .course-kit/pr07/v1/tools/check_practice.py PR07 --submission .
